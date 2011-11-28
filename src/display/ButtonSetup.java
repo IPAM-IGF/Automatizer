@@ -2,11 +2,13 @@ package display;
 
 import java.awt.Dimension;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
+import javax.swing.border.TitledBorder;
 
 import control.Controller;
 
@@ -17,6 +19,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.BorderLayout;
+import java.util.Set;
+import java.awt.FlowLayout;
 
 public class ButtonSetup extends JFrame {
 
@@ -46,35 +50,56 @@ public class ButtonSetup extends JFrame {
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		
-		JPanel panel = new JPanel();
-		panel.setLayout(gridBagLayout);
-		int ligne=1;
-		int colonne=0;
-		for(String n:Controller.BUTTONS_NAME_TYPE.keySet()){
-			if(colonne==2){
-				ligne++;colonne=1;
-			}
-			JButton btn = new JButton(n);
-			final String bname=n;
-			btn.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					setVisible(false);			
-					TranslucentWindow tw = new TranslucentWindow("PLease don't touch this until setup isn't complete", bname, Controller.BUTTONS_NAME_TYPE.get(bname), getController());
-	                tw.setSetupWindow(getThis());
-					tw.setOpacity(0.10f);
-	                tw.setVisible(true);  		
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
+		
+		
+		for(int i=0;i<2;i++){
+			JPanel panel = new JPanel();
+			panel.setLayout(gridBagLayout);
+			int ligne=1;
+			int colonne=0;
+			Set<String> cles = null;
+			if(i==0){
+				cles=Controller.BUTTONS_MOTOR.keySet();
+				TitledBorder title = BorderFactory.createTitledBorder("Motor");
+				panel.setBorder(title);
+			}else{
+				if(i==1){
+					cles=Controller.BUTTONS_ACQUISITION.keySet();
+					TitledBorder title = BorderFactory.createTitledBorder("Acquisition");
+					panel.setBorder(title);
 				}
-			});
-			GridBagConstraints gbc_btnFde = new GridBagConstraints();
-			gbc_btnFde.insets = new Insets(5, 0, 0, 5);
-			gbc_btnFde.gridx = colonne++;
-			gbc_btnFde.gridy = ligne;
-			panel.add(btn, gbc_btnFde);
+			}
+			for(String n:cles){
+				if(colonne==2){
+					ligne++;colonne=1;
+				}
+				JButton btn = new JButton(n);
+				final String bname=n;
+				btn.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						setVisible(false);			
+						TranslucentWindow tw = new TranslucentWindow("PLease don't touch this until setup isn't complete", bname, Controller.BUTTONS_NAME_TYPE.get(bname), getController());
+		                tw.setSetupWindow(getThis());
+						tw.setOpacity(0.10f);
+		                tw.setVisible(true);  		
+					}
+				});
+				GridBagConstraints gbc_btnFde = new GridBagConstraints();
+				gbc_btnFde.insets = new Insets(5, 0, 0, 5);
+				gbc_btnFde.gridx = colonne++;
+				gbc_btnFde.gridy = ligne;
+				panel.add(btn, gbc_btnFde);
+			}
+			
+			mainPanel.add(panel);
 		}
 		
-		getContentPane().add(panel);
+		getContentPane().add(mainPanel, BorderLayout.CENTER);
+		
 		
 		JPanel panelSouth = new JPanel();
 		getContentPane().add(panelSouth, BorderLayout.SOUTH);
@@ -89,6 +114,8 @@ public class ButtonSetup extends JFrame {
 			}
 		});
 		panelSouth.add(btnClose);
+		
+		
 
 		
 	}

@@ -89,6 +89,22 @@ public class GlandPanel extends JPanel{
         }
 
     }
+
+	public HashMap<String, Case> getListCases() {
+		return listCases;
+	}
+
+	public void setListCases(HashMap<String, Case> listCases) {
+		this.listCases = listCases;
+	}
+
+	public HashMap<Point, Integer> getCoordSpiral() {
+		return coordSpiral;
+	}
+
+	public void setCoordSpiral(HashMap<Point, Integer> coordSpiral) {
+		this.coordSpiral = coordSpiral;
+	}
 	
 	
 

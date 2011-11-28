@@ -8,6 +8,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Robot;
 import java.awt.SystemTray;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.HashMap;
@@ -20,24 +21,47 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import tools.FileWorker;
+import tools.Scripts;
 
 
 import display.ButtonSetup;
 import display.TrayPopupMenu;
 
 public class Controller {
+	
+	/**
+	 *  Les boutons disponibles	
+	 */
+	public static final HashMap<String,String> BUTTONS_ACQUISITION=new HashMap<String,String>();
+	static{
+		BUTTONS_ACQUISITION.put("MozillaWindow","ButtonItem");
+		BUTTONS_ACQUISITION.put("google","ButtonTextItem");
+		BUTTONS_ACQUISITION.put("Acquisition Window","ButtonItem");
+	}
+	
+	public static final HashMap<String,String> BUTTONS_MOTOR=new HashMap<String,String>();
+	static{
+		BUTTONS_MOTOR.put("ZoomIn","ButtonItem");
+		BUTTONS_MOTOR.put("ZoomOut","ButtonItem");
+		BUTTONS_MOTOR.put("Motor Window","ButtonItem");
+	}
+	
 	public static final HashMap<String,String> BUTTONS_NAME_TYPE=new HashMap<String,String>();
 	
 	static{
-		BUTTONS_NAME_TYPE.put("ZoomIn","ButtonItem");
-		BUTTONS_NAME_TYPE.put("ZoomOut","ButtonItem");
-		BUTTONS_NAME_TYPE.put("MozillaWindow","ButtonItem");
+		BUTTONS_NAME_TYPE.putAll(BUTTONS_ACQUISITION);
+		BUTTONS_NAME_TYPE.putAll(BUTTONS_MOTOR);
 	}
 	
+	/**
+	 *  Quelques composantes statiques  de configuration
+	 */
 	public static final String CONF_FILE="keyBinding.conf";
 	private static final String LOGO_URL = "images/logo.png";
 	
-	
+	/**
+	 * Attributs
+	 */
 	private Robot bot;
 	private HashMap<String,ButtonItem> buttons;
 	private CountDownLatch setupSignal;
@@ -48,6 +72,7 @@ public class Controller {
 	
 	
 	public Controller(){
+		Scripts.CONTROLLER=this;
 		buttons=new HashMap<String,ButtonItem>();
 		try {
 			bot=new Robot();
@@ -128,20 +153,33 @@ public class Controller {
 	 * Permet de focus la fenêtre associé au controller
 	 * en utilisant les commandes ALT+TAB autant de fois
 	 * qu'il le faut (dépend du numéro de la fenêtre)
+	 * @throws Exception 
 	 */
-	private void focus() {
-		looseFocus();
+	public void focus(String window) throws Exception {
+		Point loc = null;
+		switch(window){
+		case "motor":
+			loc=buttons.get("Motor Window").getPosition();break;
+		case "acquisition":
+			loc=buttons.get("Acquisition Window").getPosition();break;
+		default:
+			throw new Exception("Unknow window to focus ... ");	
+		}
+		bot.mouseMove(loc.x,loc.y+10);
+		bot.mousePress(InputEvent.BUTTON1_MASK);
+		bot.mouseRelease(InputEvent.BUTTON1_MASK);
+		/*looseFocus();
 		for(int i=0;i<numeroFenetre;i++){
 			bot.keyPress(KeyEvent.VK_ALT);
 			bot.keyPress(KeyEvent.VK_TAB);	
 			bot.keyRelease(KeyEvent.VK_ALT);
 			bot.keyRelease(KeyEvent.VK_TAB);	
-		}
+		}*/
 	}
 	
 	/**
 	 * On affiche une fenêtre invisible pour perdre le focus
-	 * sur toutes les fenêtre du bureau
+	 * sur toutes les fenêtres du bureau
 	 */
 	public static void looseFocus(){
 		JFrame jf=new JFrame();
@@ -171,7 +209,7 @@ public class Controller {
         }
         final Controller motor=new Controller(1);
         TrayPopupMenu popup = new TrayPopupMenu(LOGO_URL,motor);
-        
+
         boolean setupIsOK=false;
         
         if(new File(CONF_FILE).exists()){
@@ -191,8 +229,14 @@ public class Controller {
 				e.printStackTrace();
 			}
         }
-        //((ButtonTextItem)cont.get("googleText")).setText("j'ai reussi");
-        motor.focus();
+        
+        try {
+			motor.focus("motor");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+        ((ButtonTextItem)motor.get("google")).setText("j'ai reussi");
        // ((ButtonItem)motor.get("MozillaWindow")).leftClick();
 	}
 }

@@ -6,6 +6,8 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
 
+import tools.Scripts;
+
 import display.panels.GlandPanel;
 
 import java.awt.Dimension;
@@ -21,7 +23,7 @@ public class GlandZoneSelector extends JFrame{
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		Dimension screenSize=Toolkit.getDefaultToolkit().getScreenSize();
 		setSize(screenSize.width,screenSize.height-40);
-		GlandPanel gpanel = new GlandPanel();
+		final GlandPanel gpanel = new GlandPanel();
 		getContentPane().add(gpanel, BorderLayout.CENTER);
 		setUndecorated(true);
 		setOpacity(0.9f);
@@ -36,6 +38,14 @@ public class GlandZoneSelector extends JFrame{
 		panelValid.setLayout(gbl_panelValid);
 		
 		JButton btnLaunch = new JButton("Launch");
+		btnLaunch.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				Scripts.simpleAcquisition(gpanel);
+			}
+		});
 		GridBagConstraints gbc_btnLaunch = new GridBagConstraints();
 		gbc_btnLaunch.insets = new Insets(0, 0, 0, 5);
 		gbc_btnLaunch.gridx = 1;

@@ -2,14 +2,16 @@ package display.panels;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 public class Case extends JPanel{
+	
+	/**
+	 * Les paramètres lié au moteur (dimension du bloc
+	 */
+	public static final Dimension CASE_DIMENSION = new Dimension(5000,4000);
 	
 	
 	private static final Dimension DEFAULT_SIZE=new Dimension(40,40);
