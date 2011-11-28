@@ -4,9 +4,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-import Control.Controller;
-import Listeners.KeyDetect;
-import Listeners.MouseDetect;
+import control.Controller;
+import control.listeners.KeyDetect;
+import control.listeners.MouseDetect;
+
 import static java.awt.GraphicsDevice.WindowTranslucency.*;
 
 public class TranslucentWindow extends JFrame {

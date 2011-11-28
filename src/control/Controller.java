@@ -1,4 +1,4 @@
-package Control;
+package control;
 
 import static java.awt.GraphicsDevice.WindowTranslucency.TRANSLUCENT;
 
@@ -8,26 +8,30 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Robot;
 import java.awt.SystemTray;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import Tools.FileWorker;
+import tools.FileWorker;
+
 
 import display.ButtonSetup;
 import display.TrayPopupMenu;
 
 public class Controller {
-	public static final HashMap<String,String> BUTTONS_NAME_TYPE=new HashMap<>();
+	public static final HashMap<String,String> BUTTONS_NAME_TYPE=new HashMap<String,String>();
+	
 	static{
 		BUTTONS_NAME_TYPE.put("ZoomIn","ButtonItem");
 		BUTTONS_NAME_TYPE.put("ZoomOut","ButtonItem");
-		BUTTONS_NAME_TYPE.put("googleText","ButtonTextItem");
+		BUTTONS_NAME_TYPE.put("MozillaWindow","ButtonItem");
 	}
 	
 	public static final String CONF_FILE="keyBinding.conf";
@@ -38,6 +42,11 @@ public class Controller {
 	private HashMap<String,ButtonItem> buttons;
 	private CountDownLatch setupSignal;
 
+	
+	// Numéro de la fenetre
+	private int numeroFenetre = -1 ;
+	
+	
 	public Controller(){
 		buttons=new HashMap<String,ButtonItem>();
 		try {
@@ -47,6 +56,12 @@ public class Controller {
 			System.exit(0);
 		}
 		setSetupSignal(new CountDownLatch(1));
+	}
+	
+	public Controller(int n){
+		this();
+		numeroFenetre=n;	
+		System.out.println(numeroFenetre);
 	}
 	
 	public ButtonItem get(String s){
@@ -109,6 +124,34 @@ public class Controller {
 		return (buttons.size()==BUTTONS_NAME_TYPE.size());
 	}
 	
+	/**
+	 * Permet de focus la fenêtre associé au controller
+	 * en utilisant les commandes ALT+TAB autant de fois
+	 * qu'il le faut (dépend du numéro de la fenêtre)
+	 */
+	private void focus() {
+		looseFocus();
+		for(int i=0;i<numeroFenetre;i++){
+			bot.keyPress(KeyEvent.VK_ALT);
+			bot.keyPress(KeyEvent.VK_TAB);	
+			bot.keyRelease(KeyEvent.VK_ALT);
+			bot.keyRelease(KeyEvent.VK_TAB);	
+		}
+	}
+	
+	/**
+	 * On affiche une fenêtre invisible pour perdre le focus
+	 * sur toutes les fenêtre du bureau
+	 */
+	public static void looseFocus(){
+		JFrame jf=new JFrame();
+		jf.setUndecorated(true);
+		jf.setOpacity(0.1f);
+		jf.setVisible(true);
+		jf.requestFocus();
+		jf.dispose();
+	}
+	
 	public static void main(String[] args) {
 		// Determine if the GraphicsDevice supports translucency.
         GraphicsEnvironment ge = 
@@ -126,62 +169,30 @@ public class Controller {
             System.out.println("SystemTray is not supported");
             return;
         }
-        final Controller cont=new Controller();
-        TrayPopupMenu popup = new TrayPopupMenu(LOGO_URL,cont);
+        final Controller motor=new Controller(1);
+        TrayPopupMenu popup = new TrayPopupMenu(LOGO_URL,motor);
         
         boolean setupIsOK=false;
         
         if(new File(CONF_FILE).exists()){
-        	setupIsOK=cont.loadConf();
+        	setupIsOK=motor.loadConf();
         }
         if(!setupIsOK){
         	SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    ButtonSetup bs=new ButtonSetup(cont);  
+                    ButtonSetup bs=new ButtonSetup(motor);  
                     bs.setVisible(true);
                 }               
             });
         	try {
-				cont.getSetupSignal().await();
+				motor.getSetupSignal().await();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
         }
         //((ButtonTextItem)cont.get("googleText")).setText("j'ai reussi");
-      
-       
-        
-		/*
-		BufferedImage bimg=robot.createScreenCapture(new Rectangle(10, 10, 100, 100));
-		ImagePlus imp=new ImagePlus();
-		ColorProcessor fp=new ColorProcessor(bimg);
-		imp.setProcessor(fp);
-		imp.show();
-		Automatizer auto=new Automatizer();
-		JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
-		while(auto.zoomIn==null && auto.zoomOut==null){
-			if(CLICKED){
-
-				switch(MouseFlasher.CLICK_COUNT){
-					case 1:auto.zoomIn=tempPoint;break;
-					case 2:auto.zoomOut=tempPoint;break;
-				}
-				System.out.println(auto.zoomIn+"---"+auto.zoomOut);
-				tempPoint=null;
-				CLICKED=false;
-			}
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}*/		
+        motor.focus();
+       // ((ButtonItem)motor.get("MozillaWindow")).leftClick();
 	}
-	
-	
 }

@@ -4,10 +4,12 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import Control.Controller;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
+
+import control.Controller;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;

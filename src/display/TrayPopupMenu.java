@@ -13,7 +13,8 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 
-import Control.Controller;
+import control.Controller;
+
 
 public class TrayPopupMenu extends PopupMenu {
 

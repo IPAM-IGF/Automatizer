@@ -1,8 +1,11 @@
-package Control;
+package control;
 
 import java.awt.Point;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+
+import display.TranslucentWindow;
 
 public class ButtonItem implements ControllerItem{
 
@@ -48,7 +51,7 @@ public class ButtonItem implements ControllerItem{
 
 	@Override
 	public void leftClick(){
-		bot.mouseMove(position.x, position.y);
+	    bot.mouseMove(position.x, position.y);
 		bot.mousePress(LEFT_C);
 		bot.mouseRelease(LEFT_C);
 	}
