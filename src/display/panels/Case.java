@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-public class Case extends JPanel{
+public class Case extends JPanel implements Comparable<Case>{
 	
 	/**
 	 * Les paramètres lié au moteur (dimension du bloc
@@ -15,11 +15,17 @@ public class Case extends JPanel{
 	
 	
 	private static final Dimension DEFAULT_SIZE=new Dimension(40,40);
-
+	public static final String DONE_STATE = "done";
+	public static final String RUNNING_STATE = "running";
+	public static final String SELECTED_STATE = "selected";
+	public static final String DEFAULT_STATE = "none";
+	
 	// Couleur de la case
 	public static final Color DEFAULT_BG = null;
 	public static final Color SELECTED_BG = Color.GREEN;
 	public static final Color MOUSEOVER_BG = Color.WHITE;
+	public static final Color RUNNING_BG = Color.CYAN;
+	public static final Color DONE_BG = Color.CYAN;
 	
 	// Numéro du bloc
 	private int numero = -1;
@@ -27,6 +33,9 @@ public class Case extends JPanel{
 	
 	// Selection du bloc
 	private boolean selected=false;
+	
+	// Etat du bloc (en attente, en cours etc)
+	private String state = "none";
 	
 	public Case(int width,int height, int num){
 		this(width,height);
@@ -71,5 +80,37 @@ public class Case extends JPanel{
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+		if(this.selected){
+			setState(SELECTED_STATE);
+		}else{
+			setState(DEFAULT_STATE);
+		}
 	}
+
+
+	public String getState() {
+		return state;
+	}
+
+
+	public void setState(String state) {
+		switch(state){
+		case Case.DEFAULT_STATE:
+			setBackground(Case.DEFAULT_BG);break;
+		case Case.SELECTED_STATE:
+			setBackground(Case.SELECTED_BG);break;
+		case Case.RUNNING_STATE:
+			setBackground(Case.RUNNING_BG);break;
+		case Case.DONE_STATE:
+			setBackground(Case.DONE_BG);break;
+			default:
+				System.out.println("Unknow state");
+				System.exit(0);
+		}
+		this.state = state;
+	}
+	
+	public int compareTo(Case c) {
+	    return this.numero>c.getNumero() ? 1 : -1;
+	  }
 }

@@ -34,15 +34,19 @@ public class Controller {
 	 */
 	public static final HashMap<String,String> BUTTONS_ACQUISITION=new HashMap<String,String>();
 	static{
-		BUTTONS_ACQUISITION.put("MozillaWindow","ButtonItem");
-		BUTTONS_ACQUISITION.put("google","ButtonTextItem");
+		BUTTONS_ACQUISITION.put("Measure","ButtonItem");
 		BUTTONS_ACQUISITION.put("Acquisition Window","ButtonItem");
 	}
 	
 	public static final HashMap<String,String> BUTTONS_MOTOR=new HashMap<String,String>();
 	static{
-		BUTTONS_MOTOR.put("ZoomIn","ButtonItem");
-		BUTTONS_MOTOR.put("ZoomOut","ButtonItem");
+		
+		BUTTONS_MOTOR.put("X ZoomIn","ButtonItem");
+		BUTTONS_MOTOR.put("X ZoomOut","ButtonItem");
+		BUTTONS_MOTOR.put("Y ZoomIn","ButtonItem");
+		BUTTONS_MOTOR.put("Y ZoomOut","ButtonItem");
+		BUTTONS_MOTOR.put("X step","ButtonTextItem");
+		BUTTONS_MOTOR.put("Y step","ButtonTextItem");
 		BUTTONS_MOTOR.put("Motor Window","ButtonItem");
 	}
 	
@@ -57,7 +61,7 @@ public class Controller {
 	 *  Quelques composantes statiques  de configuration
 	 */
 	public static final String CONF_FILE="keyBinding.conf";
-	private static final String LOGO_URL = "images/logo.png";
+	public static final String LOGO_URL = "images/logo.png";
 	
 	/**
 	 * Attributs
@@ -139,7 +143,7 @@ public class Controller {
 	 * @return renvoi un boolean = true si tous les boutons ont été paramétrés
 	 * ou false si ce n'est pas le cas
 	 */
-	private boolean loadConf() {
+	public boolean loadConf() {
 		String content=FileWorker.read(new File(CONF_FILE));
 		String[] lignes=content.split("\n");
 		for(String ligne:lignes){
@@ -165,8 +169,9 @@ public class Controller {
 		default:
 			throw new Exception("Unknow window to focus ... ");	
 		}
-		bot.mouseMove(loc.x,loc.y+10);
+		bot.mouseMove(loc.x,loc.y+20);
 		bot.mousePress(InputEvent.BUTTON1_MASK);
+		bot.delay(100);
 		bot.mouseRelease(InputEvent.BUTTON1_MASK);
 		/*looseFocus();
 		for(int i=0;i<numeroFenetre;i++){
@@ -236,7 +241,7 @@ public class Controller {
 			e.printStackTrace();
 			System.exit(0);
 		}
-        ((ButtonTextItem)motor.get("google")).setText("j'ai reussi");
+       // ((ButtonTextItem)motor.get("google")).setText("j'ai reussi");
        // ((ButtonItem)motor.get("MozillaWindow")).leftClick();
 	}
 }

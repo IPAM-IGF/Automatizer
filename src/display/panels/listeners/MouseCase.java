@@ -12,11 +12,11 @@ public class MouseCase implements MouseListener{
 	// Si on maintient le clic pour en sélectionner plusieurs
 	private static boolean multiSelect=false;
 	private static int activeMousePressed=-1;
-	
+	private static boolean mouseOverOnly = false;
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+		if(isMouseOverOnly()) return;
 		
 	}
 
@@ -25,12 +25,10 @@ public class MouseCase implements MouseListener{
 		if(multiSelect && !((Case)e.getComponent()).isSelected()
 				&& activeMousePressed==MouseEvent.BUTTON1){
 			((Case)e.getComponent()).setSelected(true);
-			e.getComponent().setBackground(Case.SELECTED_BG);
 		}else{
 			if(multiSelect && ((Case)e.getComponent()).isSelected()
 					&& activeMousePressed==MouseEvent.BUTTON3){
 				((Case)e.getComponent()).setSelected(false);
-				e.getComponent().setBackground(Case.DEFAULT_BG);
 			}else{
 				e.getComponent().setBackground(Case.MOUSEOVER_BG);
 			}
@@ -47,15 +45,16 @@ public class MouseCase implements MouseListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if(isMouseOverOnly()) return;
 		multiSelect=true;
 		activeMousePressed=e.getButton();
 		switch(e.getButton()){
 		case MouseEvent.BUTTON1:
 			((Case)e.getComponent()).setSelected(true);
-			e.getComponent().setBackground(Case.SELECTED_BG);break;
+			break;
 		case MouseEvent.BUTTON3:
 			((Case)e.getComponent()).setSelected(false);
-			e.getComponent().setBackground(Case.DEFAULT_BG);break;
+			break;
 		}
 			
 		
@@ -66,6 +65,17 @@ public class MouseCase implements MouseListener{
 	public void mouseReleased(MouseEvent e) {
 		multiSelect=false;
 		activeMousePressed=-1;
+		if(isMouseOverOnly()) return;
 	}
+
+	public static boolean isMouseOverOnly() {
+		return mouseOverOnly;
+	}
+
+	public static void setMouseOverOnly(boolean mouseOverOnly) {
+		MouseCase.mouseOverOnly = mouseOverOnly;
+	}
+
+	
 
 }

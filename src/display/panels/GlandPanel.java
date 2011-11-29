@@ -105,6 +105,11 @@ public class GlandPanel extends JPanel{
 	public void setCoordSpiral(HashMap<Point, Integer> coordSpiral) {
 		this.coordSpiral = coordSpiral;
 	}
+
+	public void setMouseOverOnly(boolean b) {
+		MouseCase.setMouseOverOnly(b);
+		
+	}
 	
 	
 

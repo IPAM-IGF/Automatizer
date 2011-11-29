@@ -5,7 +5,6 @@ import java.awt.Robot;
 
 import static java.awt.event.KeyEvent.*;
 
-import javax.swing.KeyStroke;
 
 public class ButtonTextItem extends ButtonItem {
 
@@ -27,6 +26,7 @@ public class ButtonTextItem extends ButtonItem {
 		clearContent();
 		for(int key:keyCodes){
 			keyClick(key);
+			System.out.println(key);
 		}
 	}
 	
@@ -36,8 +36,13 @@ public class ButtonTextItem extends ButtonItem {
 		keyClick(VK_BACK_SPACE);
 	}
 	private void keyClick(int key){
+		if(key >= VK_0 && key <= VK_9)
+			bot.keyPress(VK_SHIFT);
 		bot.keyPress(key);
+		bot.delay(100);
 		bot.keyRelease(key);
+		if(key >= VK_0 && key <= VK_9)
+			bot.keyRelease(VK_SHIFT);
 	}
 	private void multiClick(int[] keycodes){
 		for(int key:keycodes){
@@ -53,7 +58,7 @@ public class ButtonTextItem extends ButtonItem {
 	}
 	public static int[] stringToKeyCodes(String s){
 		int[] keycodes=new int[s.length()];
-		for(int i=0;i<s.length();i++)
+		for(int i=0;i<s.length();i++){
 			switch (s.charAt(i)) {
 	        case 'a': keycodes[i]=VK_A; break;
 	        case 'b': keycodes[i]=VK_B; break;
@@ -123,7 +128,7 @@ public class ButtonTextItem extends ButtonItem {
 	        default:
 	                throw new IllegalArgumentException("Cannot type character " + s.charAt(i));
 	        }
-
+		}
 		return keycodes;
 	}
 	

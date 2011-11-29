@@ -16,6 +16,7 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.Timer;
 
 public class GlandZoneSelector extends JFrame{
 	public GlandZoneSelector(){
@@ -42,8 +43,25 @@ public class GlandZoneSelector extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
-				Scripts.simpleAcquisition(gpanel);
+				//dispose();
+				//setVisible(false);
+				Thread simpleA = new Thread(){
+					public void run(){
+						Scripts.simpleAcquisition(gpanel);
+					}
+				};
+				simpleA.start();
+				
+				// Definit un timer pour toute les minutes
+				/*Timer check = new Timer(1000, new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						
+						
+					}
+				});
+				check.start();*/
 			}
 		});
 		GridBagConstraints gbc_btnLaunch = new GridBagConstraints();

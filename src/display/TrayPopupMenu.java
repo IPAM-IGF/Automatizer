@@ -44,6 +44,15 @@ public class TrayPopupMenu extends PopupMenu {
                 bs.setVisible(true);
 			}
 		});
+        MenuItem launchItem = new MenuItem("Launch");
+        launchItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				GlandZoneSelector gs=new GlandZoneSelector();  
+				gs.setVisible(true);
+			}
+		});
         MenuItem exitItem = new MenuItem("Exit");
         exitItem.addActionListener(new ActionListener() {
 			
@@ -57,6 +66,7 @@ public class TrayPopupMenu extends PopupMenu {
         setupItem.add(setupKeyItem);
         this.add(setupItem);
         this.addSeparator();
+        this.add(launchItem);
         this.add(exitItem);
        
         trayIcon.setPopupMenu(this);
