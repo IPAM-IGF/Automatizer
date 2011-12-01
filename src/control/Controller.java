@@ -21,7 +21,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import main.Automatizer;
+import main.Server;
 
 import tools.FileWorker;
 import tools.Scripts;
@@ -130,7 +130,7 @@ public class Controller {
 	 *  à la racine du programme
 	 */
 	public void save() {
-		String fname=Automatizer.CONF_FILE;
+		String fname=Server.CONF_FILE;
 		String content="";
 		for(String name:buttons.keySet()){
 			ButtonItem item=buttons.get(name);
@@ -148,7 +148,7 @@ public class Controller {
 	 * ou false si ce n'est pas le cas
 	 */
 	public boolean loadConf() {
-		String content=FileWorker.read(new File(Automatizer.CONF_FILE));
+		String content=FileWorker.read(new File(Server.CONF_FILE));
 		String[] lignes=content.split("\n");
 		for(String ligne:lignes){
 			String[] infos=ligne.split("::");
@@ -217,11 +217,11 @@ public class Controller {
             return;
         }
         final Controller motor=new Controller(1);
-        TrayPopupMenu popup = new TrayPopupMenu(Automatizer.LOGO_URL,motor);
+        TrayPopupMenu popup = new TrayPopupMenu(Server.LOGO_URL,motor);
 
         boolean setupIsOK=false;
         
-        if(new File(Automatizer.CONF_FILE).exists()){
+        if(new File(Server.CONF_FILE).exists()){
         	setupIsOK=motor.loadConf();
         }
         if(!setupIsOK){

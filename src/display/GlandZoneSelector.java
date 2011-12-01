@@ -19,12 +19,14 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 public class GlandZoneSelector extends JFrame{
+	public static GlandPanel currentPanel = new GlandPanel();
 	public GlandZoneSelector(){
 		super();
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		Dimension screenSize=Toolkit.getDefaultToolkit().getScreenSize();
 		setSize(screenSize.width,screenSize.height-40);
-		final GlandPanel gpanel = new GlandPanel();
+		final GlandPanel gpanel = currentPanel;
+		currentPanel = gpanel;
 		getContentPane().add(gpanel, BorderLayout.CENTER);
 		setUndecorated(true);
 		setOpacity(0.9f);

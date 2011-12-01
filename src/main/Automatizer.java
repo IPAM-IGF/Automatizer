@@ -1,184 +1,75 @@
 package main;
-import static java.awt.GraphicsDevice.WindowTranslucency.TRANSLUCENT;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.SystemTray;
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.net.URL;
 
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.JButton;
 
-import control.Controller;
-import display.ButtonSetup;
-import display.TrayPopupMenu;
+import tools.server.ServerResponse;
+import main.Client.*;
 
-
-
+/**
+ * Main class
+ * @author Jérémy DEVERDUN
+ *
+ */
 public class Automatizer {
-	/**
-	 *  Quelques composantes statiques  de configuration
-	 */
-	public static final String CONF_FILE="keyBinding.conf";
-	// a décommenter quand on exporte en jar, et changer dans traypopupmenu !
-	public static final URL LOGO_URL = null; //Automatizer.class.getClassLoader().getResource("logo.png");
-	
-	
-	private static void getSimulationWindows(){
-		JFrame motorf=new JFrame("Motor");
-		JFrame acquif=new JFrame("Acquisition");
-		motorf.setLayout(new FlowLayout());
-		acquif.setLayout(new FlowLayout());
-		motorf.setSize(500,200);
-		acquif.setSize(400, 200);
-		motorf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		acquif.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		final JLabel jl=new JLabel("0");
-		final JTextField jt=new JTextField("");
-		jt.setColumns(10);
-		JButton tm=new JButton("-");
-		tm.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				jl.setText(""+(Integer.parseInt(jl.getText())-Integer.parseInt(jt.getText())));
-			}
-		});
-		motorf.getContentPane().add(tm,BorderLayout.CENTER);
-		motorf.getContentPane().add(jt,BorderLayout.CENTER);
-		JButton tp=new JButton("+");
-		tp.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				jl.setText(""+(Integer.parseInt(jl.getText())+Integer.parseInt(jt.getText())));
-			}
-		});
-		motorf.getContentPane().add(tp,BorderLayout.CENTER);
-		
-		motorf.getContentPane().add(jl,BorderLayout.SOUTH);
-		
-		final JLabel jl2=new JLabel("0");
-		final JTextField jt2=new JTextField("");
-		jt2.setColumns(10);
-		JButton tm2=new JButton("-");
-		tm2.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				jl2.setText(""+(Integer.parseInt(jl2.getText())-Integer.parseInt(jt2.getText())));
-			}
-		});
-		motorf.getContentPane().add(tm2,BorderLayout.CENTER);
-		motorf.getContentPane().add(jt2,BorderLayout.CENTER);
-		JButton tp2=new JButton("+");
-		tp2.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				jl2.setText(""+(Integer.parseInt(jl2.getText())+Integer.parseInt(jt2.getText())));
-			}
-		});
-		motorf.getContentPane().add(tp2,BorderLayout.CENTER);
-		
-		motorf.getContentPane().add(jl2,BorderLayout.SOUTH);
-		
-		JButton meas=new JButton("MEASURE");
-		final JProgressBar jp=new JProgressBar();
-		jp.setVisible(false);
-		jp.setMaximum(100);
-		jp.setValue(0);
-		meas.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				jp.setVisible(true);
-				Thread thr=new Thread(){
-					public void run(){
-						for(int i=0;i<10;i++){
-							jp.setValue(jp.getValue()+10);
-							try {
-								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-						jp.setVisible(false);
-						jp.setValue(0);
-					}
-				};
-				thr.start();
-			}
-		});
-		acquif.add(meas);
-		acquif.add(jp);
-		motorf.setVisible(true);
-		acquif.setVisible(true);
-	}
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// Determine if the GraphicsDevice supports translucency.
-        GraphicsEnvironment ge = 
-                GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
+	public static void main(String[] args){
+		final JFrame mainWindow = new JFrame("Automatizer");
+		mainWindow.setSize(200, 100);
+		mainWindow.setLocation(Toolkit.getDefaultToolkit().getScreenSize().width/2-200,Toolkit.getDefaultToolkit().getScreenSize().height/2-100);
+		mainWindow.setUndecorated(true);
+		mainWindow.setOpacity(0.1f);
+		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainWindow.getContentPane().setLayout(null);
+		// Voir Server.java pour rendre visible les logos  dans un jar
+		ImageIcon ic = new ImageIcon(Automatizer.class.getClassLoader().getResource("images/server-logo.png"));//"server-logo.png");
+		Image img = ic.getImage() ;  
+		Image newimg = img.getScaledInstance( 85, 76,  java.awt.Image.SCALE_SMOOTH ) ;  
+		ic = new ImageIcon( newimg );
 
-        //If translucent windows aren't supported, exit.
-        if (!gd.isWindowTranslucencySupported(TRANSLUCENT)) {
-            System.err.println(
-                "Translucency is not supported");
-                System.exit(0);
-        }
-        
-        if (!SystemTray.isSupported()) {
-            System.out.println("SystemTray is not supported");
-            return;
-        }
-        
-        
-        // Simulation 
-        getSimulationWindows();
-        
-        
-        final Controller motor=new Controller(1);
-        TrayPopupMenu popup = new TrayPopupMenu(Automatizer.LOGO_URL,motor);
-
-        boolean setupIsOK=false;
-        
-        if(new File(Automatizer.CONF_FILE).exists()){
-        	setupIsOK=motor.loadConf();
-        }
-        if(!setupIsOK){
-        	SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    ButtonSetup bs=new ButtonSetup(motor);  
-                    bs.setVisible(true);
-                }               
-            });
-        	try {
-				motor.getSetupSignal().await();
+			
+		JButton btnServer = new JButton(ic);
+		btnServer.setBounds(12, 12, 85, 76);
+		btnServer.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				mainWindow.dispose();
+				Server.main(null);
+			}
+		});
+		mainWindow.getContentPane().add(btnServer);
+		btnServer.setBackground(Color.white);
+		ic = new ImageIcon(Automatizer.class.getClassLoader().getResource("images/client-logo.png"));
+		img = ic.getImage() ;  
+		newimg = img.getScaledInstance( 85, 76,  java.awt.Image.SCALE_SMOOTH ) ;  
+		ic = new ImageIcon( newimg );
+		JButton btnClient = new JButton(ic);
+		btnClient.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				mainWindow.dispose();
+				Client.main(null);
+			}
+		});
+		btnClient.setBounds(103, 12, 85, 76);
+		btnClient.setBackground(Color.white);
+		mainWindow.getContentPane().add(btnClient);
+		mainWindow.setVisible(true);
+		for(float i=0;i<=1;i+=0.01){
+			mainWindow.setOpacity(i);
+			try {
+				Thread.sleep(20);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-        }
-      /*  try 
-			motor.focus("motor");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-        ((ButtonTextItem)motor.get("X step")).setText(""+Case.CASE_DIMENSION.width);*/
 	}
 }

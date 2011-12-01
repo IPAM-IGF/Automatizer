@@ -30,8 +30,8 @@ public class TrayPopupMenu extends PopupMenu {
 		super();
 		imageLoc=image;
 		this.cont=cont;
-		// remplacer logo.png par image quand on exprote en jar
-		Image imm = Toolkit.getDefaultToolkit().getImage("logo.png");
+		// remplacer logo.png par image quand on exporte en jar
+		Image imm = (new ImageIcon(image)).getImage();
 		trayIcon =
                 new TrayIcon(imm, "Tray Icon", this);//createImage(imageLoc, "tray icon"));
         final SystemTray tray = SystemTray.getSystemTray();

@@ -127,7 +127,6 @@ public class Scripts {
 		HashMap loc = new HashMap<>();
 		for(Object p:h.keySet())
 			loc.put(h.get(p), p);
-		
 		return loc;
 	}
 	
