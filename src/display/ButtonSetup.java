@@ -12,6 +12,7 @@ import javax.swing.border.TitledBorder;
 
 import control.Controller;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -26,6 +27,10 @@ public class ButtonSetup extends JFrame {
 
 	private static final Dimension DEFAULT_SIZE=new Dimension(300,600);
 	private static final String TITLE="Command setup";
+	
+	// Couleur des boutonns selon si on les a défini ou non
+	public static final Color DEFINED_BG = Color.GREEN;
+	public static final Color UNDEFINED_BG = Color.RED;
 	
 	
 	private Controller cont;
@@ -73,9 +78,11 @@ public class ButtonSetup extends JFrame {
 			}
 			for(String n:cles){
 				if(colonne==2){
-					ligne++;colonne=1;
+					ligne++;colonne=0;
 				}
-				JButton btn = new JButton(n);
+				final JButton btn = new JButton(n);
+				if(getController().get(n)==null) btn.setBackground(UNDEFINED_BG);
+				else btn.setBackground(DEFINED_BG);
 				final String bname=n;
 				btn.addActionListener(new ActionListener() {
 					
@@ -83,7 +90,7 @@ public class ButtonSetup extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						setVisible(false);			
 						TranslucentWindow tw = new TranslucentWindow("PLease don't touch this until setup isn't complete", bname, Controller.BUTTONS_NAME_TYPE.get(bname), getController());
-		                tw.setSetupWindow(getThis());
+		                tw.setSetupWindow(btn);
 						tw.setOpacity(0.10f);
 		                tw.setVisible(true);  		
 					}

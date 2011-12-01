@@ -94,6 +94,11 @@ public class Case extends JPanel implements Comparable<Case>{
 
 
 	public void setState(String state) {
+		this.state = state;
+		setBackgroundOfState();
+	}
+	
+	public void setBackgroundOfState(){
 		switch(state){
 		case Case.DEFAULT_STATE:
 			setBackground(Case.DEFAULT_BG);break;
@@ -107,9 +112,8 @@ public class Case extends JPanel implements Comparable<Case>{
 				System.out.println("Unknow state");
 				System.exit(0);
 		}
-		this.state = state;
+		
 	}
-	
 	public int compareTo(Case c) {
 	    return this.numero>c.getNumero() ? 1 : -1;
 	  }

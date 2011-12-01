@@ -39,7 +39,7 @@ public class ButtonTextItem extends ButtonItem {
 		if(key >= VK_0 && key <= VK_9)
 			bot.keyPress(VK_SHIFT);
 		bot.keyPress(key);
-		bot.delay(100);
+		bot.delay(Controller.DELAY_PRESS_CLICK);
 		bot.keyRelease(key);
 		if(key >= VK_0 && key <= VK_9)
 			bot.keyRelease(VK_SHIFT);

@@ -41,6 +41,15 @@ public class Scripts {
 		List<Case> collection = new ArrayList<Case>(gpanel.getListCases().values());
 		Collections.sort((List)collection);
 		refPoint = coord.get(1);
+		
+		// fait une pause de 2 s avant de commencer
+		// pour éviter les conflits avec l'utilisateur
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e2) {
+			e2.printStackTrace();
+		}
+		
 		for(Case c:collection){
 			if(c.getState().equals(Case.SELECTED_STATE)){
 				c.setState(Case.RUNNING_STATE);
@@ -84,6 +93,15 @@ public class Scripts {
 			}
 			
 		}
+		// On se replace dans la position d'origine
+		moveMotor(-localisation[0],-localisation[1]);
+		try {
+			CONTROLLER.focus("acquisition");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+		
 	}
 	private static void moveMotor(int x, int y){
 		((ButtonTextItem)CONTROLLER.get("X step")).setText(""+Math.abs(x));

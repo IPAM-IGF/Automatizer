@@ -19,7 +19,7 @@ public class TranslucentWindow extends JFrame {
 	// Boite de dialogue d'aide
 	public static final String MSG="Where is located the ";
 	private final Dimension dimAide=new Dimension(330,50);
-	private JFrame dialogFrame;
+	private JWindow dialogFrame;
 	private JLabel txtAide;
 	private String button;
 	
@@ -32,8 +32,8 @@ public class TranslucentWindow extends JFrame {
 	//Controlleur
 	private Controller cont;
 	
-	// Setup window
-	private ButtonSetup setupWindow;
+	// Bouton à paramétrer
+	private JButton setupButton;
 	
     public TranslucentWindow(String title, String button, String type, Controller c) {
     	super(title);
@@ -50,13 +50,13 @@ public class TranslucentWindow extends JFrame {
         addMouseListener(new MouseDetect(this));
         getContentPane().addKeyListener(new KeyDetect(this));
         getContentPane().setFocusable(true);
-        dialogFrame=new JFrame("");
+        dialogFrame=new JWindow(this);
         txtAide=new JLabel(MSG+this.button);
         dialogFrame.add(txtAide);
-        dialogFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //dialogFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         dialogFrame.setSize(dimAide.width,dimAide.height);
         dialogFrame.setLocation(screenSize.width/2-dimAide.width/2,screenSize.height/2-dimAide.height/2);
-        dialogFrame.setUndecorated(true);
+      //  dialogFrame.setUndecorated(true);
         dialogFrame.setOpacity(0.80f);
         dialogFrame.setVisible(true);
     }
@@ -70,9 +70,10 @@ public class TranslucentWindow extends JFrame {
 		cont.setButton(button, buttonType, getTempXY());
 		dispose();
 		cont=null;
-		if(setupWindow!=null){
-			setupWindow.setVisible(true);
-			setupWindow=null;
+		if(setupButton!=null){
+			setupButton.setBackground(ButtonSetup.DEFINED_BG);
+			setupButton.getTopLevelAncestor().setVisible(true);
+			setupButton=null;
 		}
     }
 
@@ -93,7 +94,7 @@ public class TranslucentWindow extends JFrame {
 		this.cont = cont;
 	}
 
-	public void setSetupWindow(ButtonSetup s) {
-		this.setupWindow=s;
+	public void setSetupWindow(JButton s) {
+		this.setupButton=s;
 	}
 }

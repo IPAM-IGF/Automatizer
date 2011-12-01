@@ -46,6 +46,7 @@ public class ButtonItem implements ControllerItem{
 	public void rightClick(){
 		bot.mouseMove(position.x, position.y);
 		bot.mousePress(RIGHT_C);
+		bot.delay(Controller.DELAY_PRESS_CLICK);
 		bot.mouseRelease(RIGHT_C);
 	}
 
@@ -53,7 +54,7 @@ public class ButtonItem implements ControllerItem{
 	public void leftClick(){
 	    bot.mouseMove(position.x, position.y);
 		bot.mousePress(LEFT_C);
-		bot.delay(100);
+		bot.delay(Controller.DELAY_PRESS_CLICK);
 		bot.mouseRelease(LEFT_C);
 	}
 
@@ -61,6 +62,7 @@ public class ButtonItem implements ControllerItem{
 	public void middleClick(){
 		bot.mouseMove(position.x, position.y);
 		bot.mousePress(MIDDLE_C);
+		bot.delay(Controller.DELAY_PRESS_CLICK);
 		bot.mouseRelease(MIDDLE_C);
 		
 	}

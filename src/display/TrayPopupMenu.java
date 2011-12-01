@@ -6,6 +6,7 @@ import java.awt.Menu;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
+import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,17 +21,19 @@ public class TrayPopupMenu extends PopupMenu {
 
 	private final TrayIcon trayIcon;
 	
-	private String imageLoc="";
+	private URL imageLoc;
 	private MenuItem exitItem, setupKeyItem;
 	private Menu setupItem;
 	private Controller cont;
 	
-	public TrayPopupMenu(String image, Controller cont){
+	public TrayPopupMenu(URL image, Controller cont){
 		super();
 		imageLoc=image;
 		this.cont=cont;
+		// remplacer logo.png par image quand on exprote en jar
+		Image imm = Toolkit.getDefaultToolkit().getImage("logo.png");
 		trayIcon =
-                new TrayIcon(createImage(imageLoc, "tray icon"));
+                new TrayIcon(imm, "Tray Icon", this);//createImage(imageLoc, "tray icon"));
         final SystemTray tray = SystemTray.getSystemTray();
        
         // Create a pop-up menu components

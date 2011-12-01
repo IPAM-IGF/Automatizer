@@ -37,10 +37,7 @@ public class MouseCase implements MouseListener{
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		if(((Case)e.getComponent()).isSelected()) 
-			e.getComponent().setBackground(Case.SELECTED_BG);
-		else
-			e.getComponent().setBackground(Case.DEFAULT_BG);			
+		((Case)e.getComponent()).setBackgroundOfState();
 	}
 
 	@Override

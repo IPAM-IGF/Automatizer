@@ -11,6 +11,7 @@ import java.awt.SystemTray;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
@@ -19,6 +20,8 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import main.Automatizer;
 
 import tools.FileWorker;
 import tools.Scripts;
@@ -57,11 +60,12 @@ public class Controller {
 		BUTTONS_NAME_TYPE.putAll(BUTTONS_MOTOR);
 	}
 	
+	
 	/**
-	 *  Quelques composantes statiques  de configuration
+	 * Le délai entre les mousepress et les mouserelease en ms
 	 */
-	public static final String CONF_FILE="keyBinding.conf";
-	public static final String LOGO_URL = "images/logo.png";
+	
+	public static final int DELAY_PRESS_CLICK = 100;
 	
 	/**
 	 * Attributs
@@ -126,7 +130,7 @@ public class Controller {
 	 *  à la racine du programme
 	 */
 	public void save() {
-		String fname=CONF_FILE;
+		String fname=Automatizer.CONF_FILE;
 		String content="";
 		for(String name:buttons.keySet()){
 			ButtonItem item=buttons.get(name);
@@ -144,7 +148,7 @@ public class Controller {
 	 * ou false si ce n'est pas le cas
 	 */
 	public boolean loadConf() {
-		String content=FileWorker.read(new File(CONF_FILE));
+		String content=FileWorker.read(new File(Automatizer.CONF_FILE));
 		String[] lignes=content.split("\n");
 		for(String ligne:lignes){
 			String[] infos=ligne.split("::");
@@ -171,7 +175,7 @@ public class Controller {
 		}
 		bot.mouseMove(loc.x,loc.y+20);
 		bot.mousePress(InputEvent.BUTTON1_MASK);
-		bot.delay(100);
+		bot.delay(DELAY_PRESS_CLICK);
 		bot.mouseRelease(InputEvent.BUTTON1_MASK);
 		/*looseFocus();
 		for(int i=0;i<numeroFenetre;i++){
@@ -213,11 +217,11 @@ public class Controller {
             return;
         }
         final Controller motor=new Controller(1);
-        TrayPopupMenu popup = new TrayPopupMenu(LOGO_URL,motor);
+        TrayPopupMenu popup = new TrayPopupMenu(Automatizer.LOGO_URL,motor);
 
         boolean setupIsOK=false;
         
-        if(new File(CONF_FILE).exists()){
+        if(new File(Automatizer.CONF_FILE).exists()){
         	setupIsOK=motor.loadConf();
         }
         if(!setupIsOK){

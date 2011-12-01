@@ -1,3 +1,4 @@
+package main;
 import static java.awt.GraphicsDevice.WindowTranslucency.TRANSLUCENT;
 
 import java.awt.BorderLayout;
@@ -8,25 +9,29 @@ import java.awt.SystemTray;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.ObjectInputStream.GetField;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import tools.Scripts;
-
-import control.ButtonTextItem;
 import control.Controller;
 import display.ButtonSetup;
 import display.TrayPopupMenu;
-import display.panels.Case;
 
 
-public class main {
 
+public class Automatizer {
+	/**
+	 *  Quelques composantes statiques  de configuration
+	 */
+	public static final String CONF_FILE="keyBinding.conf";
+	// a décommenter quand on exporte en jar, et changer dans traypopupmenu !
+	public static final URL LOGO_URL = null; //Automatizer.class.getClassLoader().getResource("logo.png");
+	
 	
 	private static void getSimulationWindows(){
 		JFrame motorf=new JFrame("Motor");
@@ -87,8 +92,36 @@ public class main {
 		
 		motorf.getContentPane().add(jl2,BorderLayout.SOUTH);
 		
-		
-		acquif.add(new JButton("MEASURE"));
+		JButton meas=new JButton("MEASURE");
+		final JProgressBar jp=new JProgressBar();
+		jp.setVisible(false);
+		jp.setMaximum(100);
+		jp.setValue(0);
+		meas.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				jp.setVisible(true);
+				Thread thr=new Thread(){
+					public void run(){
+						for(int i=0;i<10;i++){
+							jp.setValue(jp.getValue()+10);
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						jp.setVisible(false);
+						jp.setValue(0);
+					}
+				};
+				thr.start();
+			}
+		});
+		acquif.add(meas);
+		acquif.add(jp);
 		motorf.setVisible(true);
 		acquif.setVisible(true);
 	}
@@ -119,11 +152,11 @@ public class main {
         
         
         final Controller motor=new Controller(1);
-        TrayPopupMenu popup = new TrayPopupMenu(Controller.LOGO_URL,motor);
+        TrayPopupMenu popup = new TrayPopupMenu(Automatizer.LOGO_URL,motor);
 
         boolean setupIsOK=false;
         
-        if(new File(Controller.CONF_FILE).exists()){
+        if(new File(Automatizer.CONF_FILE).exists()){
         	setupIsOK=motor.loadConf();
         }
         if(!setupIsOK){
