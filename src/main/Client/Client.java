@@ -7,9 +7,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import display.panels.GlandPanel;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.SwingConstants;
 
 import main.Automatizer;
@@ -33,6 +38,14 @@ public class Client extends JFrame {
 		glandPanel.setMouseOverOnly(true);
 		add(glandPanel);
 		setVisible(true);
+		Timer refresh = new Timer(5000, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Asker asker = new Asker(null, getThis(),Worker.UPDATED_CASES, false);
+			}
+		});
+		refresh.start();
 	}
 	public GlandPanel getGlandPanel() {
 		return glandPanel;
@@ -43,6 +56,9 @@ public class Client extends JFrame {
 			loadingFrame.dispose();
 			loadingFrame = null;
 		}
+	}
+	public Client getThis(){
+		return this;
 	}
 	public static void main(String[] args){
 		Client client=new Client();
@@ -61,16 +77,6 @@ public class Client extends JFrame {
 		//loadingFrame.add(jp);
 		loadingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		loadingFrame.setVisible(true);
-		Asker asker = new Asker(jp, client);
-		asker.doAsk(Worker.GET_GLAND_PANEL);
-		while(asker.isAlive()){
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		client.createAndShowGUI();
-		
+		Asker asker = new Asker(jp, client,Worker.GET_GLAND_PANEL, true);
 	}
 }

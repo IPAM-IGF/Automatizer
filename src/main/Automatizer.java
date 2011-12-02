@@ -27,7 +27,6 @@ public class Automatizer {
 		mainWindow.setOpacity(0.1f);
 		mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainWindow.getContentPane().setLayout(null);
-		// Voir Server.java pour rendre visible les logos  dans un jar
 		ImageIcon ic = new ImageIcon(Automatizer.class.getClassLoader().getResource("images/server-logo.png"));//"server-logo.png");
 		Image img = ic.getImage() ;  
 		Image newimg = img.getScaledInstance( 85, 76,  java.awt.Image.SCALE_SMOOTH ) ;  

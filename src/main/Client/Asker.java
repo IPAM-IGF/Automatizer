@@ -26,8 +26,8 @@ import tools.server.ServerResponse;
 public class Asker extends Thread{
 	
 	// Infos sur le serveur
-	private static final int port = 4444;
-	private static final String ip = "127.0.0.1";
+	private static final int port = 4443;
+	private static final String ip = "10.7.20.89";
 
 
 	// Infos à mettre à jours
@@ -39,29 +39,37 @@ public class Asker extends Thread{
 	private ObjectOutputStream out = null;
 	private int BUFFER_SIZE = 65536;
 	private Worker worker;
-	
+	private boolean displayClient = false;
 	private Client clientWindow;
 	
-	public Asker(JProgressBar l, Client c){
+	public Asker(JProgressBar l, Client c, String r, boolean b){
 		super();
 		setStatusArea(l);
 		setClientWindow(c);
-		l.setStringPainted(true);
+		if(l!=null) l.setStringPainted(true);
+		displayClient = b;
+		doAsk(r);
+		
 	}
 	public void run(){
 		ServerResponse obj;
 		if(statusArea != null) statusArea.setString("Attempting to connect");
+		else System.out.println("Attempting to connect");
 		try {
             kkSocket = new Socket(ip, port);
             if(statusArea != null) statusArea.setString("Connected");
+            else System.out.println("Connected");
             in = new CustomObjectInputStream((kkSocket.getInputStream()));
 			out = new ObjectOutputStream(kkSocket.getOutputStream());
 			if(statusArea != null) statusArea.setString("Sending request");
+			else System.out.println("Sending request");
 			out.writeObject(worker.clone());
 			if(statusArea != null) statusArea.setString("Retrieving informations");
+			else System.out.println("Retrieving informations");
 			obj = (ServerResponse)in.readObject();
 			processObject(obj);
 			if(statusArea != null) statusArea.setString("Done");
+			else System.out.println("Done");
 			
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host: "+ip+".");
@@ -75,12 +83,12 @@ public class Asker extends Thread{
 			try {
 				in.close();
 				out.close();
-				kkSocket.getOutputStream().flush();
 				kkSocket.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		if(displayClient) clientWindow.createAndShowGUI();
 	}
 
 	private void processObject(ServerResponse obj) {

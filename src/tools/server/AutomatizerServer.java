@@ -12,7 +12,7 @@ import display.GlandZoneSelector;
 public class AutomatizerServer extends Thread{
 	
 	// Paramètre du serveur
-	public static final int port = 4444;
+	public static final int port = 4443;
 	
 	// Attributs
 	ServerSocket serverSocket = null;

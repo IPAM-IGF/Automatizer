@@ -96,8 +96,14 @@ public class GlandPanel extends JPanel{
 
 	public void setListCases(HashMap<String, Case> listCases) {
 		this.listCases = listCases;
+		updateCasesColor();
 	}
 
+	public void updateCasesColor(){
+		for(String s:listCases.keySet()){
+			listCases.get(s).repaint();
+		}
+	}
 	public HashMap<Point, Integer> getCoordSpiral() {
 		return coordSpiral;
 	}
