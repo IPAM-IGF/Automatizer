@@ -26,7 +26,7 @@ import tools.server.ServerResponse;
 public class Asker extends Thread{
 	
 	// Infos sur le serveur
-	private static final int port = 4443;
+	private static final int port = 4444;
 	private static final String ip = "10.7.20.89";
 
 
@@ -96,7 +96,7 @@ public class Asker extends Thread{
 		case Worker.GET_GLAND_PANEL:
 			clientWindow.setGlandPanel((GlandPanel) obj.getReturnObject());break;
 		case Worker.UPDATED_CASES:
-			clientWindow.getGlandPanel().setListCases((HashMap<String, Case>) obj.getReturnObject());break;
+			clientWindow.getGlandPanel().updateCasesColor((HashMap<String, Case>) obj.getReturnObject());break;
 		}
 	}
 	

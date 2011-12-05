@@ -1,4 +1,5 @@
 package main.Client;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
 
@@ -10,6 +11,7 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import display.panels.Case;
 import display.panels.GlandPanel;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -31,7 +33,8 @@ public class Client extends JFrame {
 		super();
 	}
 	public void createAndShowGUI() {
-		setSize(Toolkit.getDefaultToolkit().getScreenSize());
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		setSize(dim.width,dim.height-30);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setUndecorated(true);
 		setOpacity(0.9f);
@@ -50,8 +53,9 @@ public class Client extends JFrame {
 	public GlandPanel getGlandPanel() {
 		return glandPanel;
 	}
-	public void setGlandPanel(GlandPanel glandPanel) {
-		this.glandPanel = glandPanel;
+	public void setGlandPanel(GlandPanel g) {
+		this.glandPanel = g;
+		//repaint();
 		if(loadingFrame!=null){
 			loadingFrame.dispose();
 			loadingFrame = null;
