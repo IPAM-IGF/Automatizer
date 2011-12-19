@@ -26,8 +26,8 @@ import tools.server.ServerResponse;
 public class Asker extends Thread{
 	
 	// Infos sur le serveur
-	private static final int port = 4444;
-	private static final String ip = "10.7.20.89";
+	private static int port = 4444;
+	public static String ip = "10.7.20.89";
 
 
 	// Infos à mettre à jours

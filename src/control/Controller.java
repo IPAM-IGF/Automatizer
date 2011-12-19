@@ -12,6 +12,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
@@ -37,17 +38,23 @@ public class Controller {
 	 */
 	public static final HashMap<String,String> BUTTONS_ACQUISITION=new HashMap<String,String>();
 	static{
-		BUTTONS_ACQUISITION.put("Measure","ButtonItem");
+		BUTTONS_ACQUISITION.put("Démarrer","ButtonItem");
+		BUTTONS_ACQUISITION.put("Save as","ButtonItem");
 		BUTTONS_ACQUISITION.put("Acquisition Window","ButtonItem");
+	}
+	public static final HashMap<String,String> BUTTONS_SAVEAS=new HashMap<String,String>();
+	static{
+		BUTTONS_SAVEAS.put("File name","ButtonTextItem");
+		BUTTONS_SAVEAS.put("OK","ButtonItem");
+		BUTTONS_SAVEAS.put("Save As Window","ButtonItem");
+		
 	}
 	
 	public static final HashMap<String,String> BUTTONS_MOTOR=new HashMap<String,String>();
 	static{
 		
-		BUTTONS_MOTOR.put("X ZoomIn","ButtonItem");
-		BUTTONS_MOTOR.put("X ZoomOut","ButtonItem");
-		BUTTONS_MOTOR.put("Y ZoomIn","ButtonItem");
-		BUTTONS_MOTOR.put("Y ZoomOut","ButtonItem");
+		BUTTONS_MOTOR.put("Move +","ButtonItem");
+		BUTTONS_MOTOR.put("Move -","ButtonItem");
 		BUTTONS_MOTOR.put("X step","ButtonTextItem");
 		BUTTONS_MOTOR.put("Y step","ButtonTextItem");
 		BUTTONS_MOTOR.put("Motor Window","ButtonItem");
@@ -58,6 +65,7 @@ public class Controller {
 	static{
 		BUTTONS_NAME_TYPE.putAll(BUTTONS_ACQUISITION);
 		BUTTONS_NAME_TYPE.putAll(BUTTONS_MOTOR);
+		BUTTONS_NAME_TYPE.putAll(BUTTONS_SAVEAS);
 	}
 	
 	
@@ -100,14 +108,35 @@ public class Controller {
 	public ButtonItem get(String s){
 		return buttons.get(s);
 	}
-	
+	public void setButton(String name, String type, ArrayList<Point> pts) {
+		switch(type){
+		case "ButtonTextItem":
+			buttons.put(name, new ButtonTextItem(bot,name,pts));
+			break;
+		case "ButtonItem":
+			buttons.put(name, new ButtonItem(bot,name,pts));
+			break;
+	}
+		
+	}
 	public void setButton(String name,String type, Point location){
 		switch(type){
 			case "ButtonTextItem":
-				buttons.put(name, new ButtonTextItem(bot,name,location));
+				if(buttons.get(name) == null){
+					buttons.put(name, new ButtonTextItem(bot,name,location));
+					break;
+				}else{
+					buttons.get(name).addPosition(location);
+				}
+					
 				break;
 			case "ButtonItem":
-				buttons.put(name, new ButtonItem(bot,name,location));
+				if(buttons.get(name) == null){
+					buttons.put(name, new ButtonItem(bot,name,location));
+					break;
+				}else{
+					buttons.get(name).addPosition(location);
+				}
 				break;
 		}
 	}
@@ -152,11 +181,18 @@ public class Controller {
 		String[] lignes=content.split("\n");
 		for(String ligne:lignes){
 			String[] infos=ligne.split("::");
-			setButton(infos[0], infos[1], new Point(Integer.parseInt(infos[2].split("//")[0]),Integer.parseInt(infos[2].split("//")[1])));
+			String[] listpoints = infos[2].split(";");
+			ArrayList<Point> pts = new ArrayList<Point>();
+			for(String pt : listpoints){
+				pts.add(new Point(Integer.parseInt(pt.split("//")[0]),Integer.parseInt(pt.split("//")[1])));
+			}
+			setButton(infos[0], infos[1], pts);
 		}
 		return (buttons.size()==BUTTONS_NAME_TYPE.size());
 	}
 	
+
+
 	/**
 	 * Permet de focus la fenêtre associé au controller
 	 * en utilisant les commandes ALT+TAB autant de fois
@@ -167,9 +203,11 @@ public class Controller {
 		Point loc = null;
 		switch(window){
 		case "motor":
-			loc=buttons.get("Motor Window").getPosition();break;
+			loc=buttons.get("Motor Window").getPosition().get(0);break;
 		case "acquisition":
-			loc=buttons.get("Acquisition Window").getPosition();break;
+			loc=buttons.get("Acquisition Window").getPosition().get(0);break;
+		case "saveas":
+			buttons.get("Save As Window").leftClick();return;
 		default:
 			throw new Exception("Unknow window to focus ... ");	
 		}
@@ -186,6 +224,16 @@ public class Controller {
 		}*/
 	}
 	
+	public void resetButton(String button) {
+		ButtonItem b = buttons.get(button);
+		if(b == null) return;
+		buttons.remove(button);
+		b.reset();
+		
+	}
+	public Robot getBot(){
+		return bot;
+	}
 	/**
 	 * On affiche une fenêtre invisible pour perdre le focus
 	 * sur toutes les fenêtres du bureau
@@ -217,7 +265,7 @@ public class Controller {
             return;
         }
         final Controller motor=new Controller(1);
-        TrayPopupMenu popup = new TrayPopupMenu(Server.LOGO_URL,motor);
+        TrayPopupMenu popup = new TrayPopupMenu(Server.LOGO_URL,motor,true);
 
         boolean setupIsOK=false;
         
@@ -248,4 +296,6 @@ public class Controller {
        // ((ButtonTextItem)motor.get("google")).setText("j'ai reussi");
        // ((ButtonItem)motor.get("MozillaWindow")).leftClick();
 	}
+
+
 }

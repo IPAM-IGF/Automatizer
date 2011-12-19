@@ -30,12 +30,12 @@ public class Scripts {
 	// Point de référence (1)
 	private static Point refPoint ;
 	
+	
 	// Prise d'image simple d'une tranche
-	public static void simpleAcquisition(GlandPanel gpanel){
+	public static void simpleAcquisition(String saveDir, String saveName, GlandPanel gpanel){
 		Point previousP = new Point();
 		Point actualP;
 		int moveX,moveY;
-		int sens = RIGHT;
 		HashMap<String, Case> listCases = gpanel.getListCases();
 		HashMap<Integer, Point> coord = invertHashMap(gpanel.getCoordSpiral());
 		List<Case> collection = new ArrayList<Case>(gpanel.getListCases().values());

@@ -1,6 +1,8 @@
 package display;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.InputEvent;
 
 import javax.swing.*;
 
@@ -40,6 +42,7 @@ public class TranslucentWindow extends JFrame {
     	cont=c;
     	buttonType=type;
     	this.button=button;
+    	cont.resetButton(this.button);
     	CURR_STEP=0;
     	setLayout(new GridBagLayout());
         setUndecorated(true);
@@ -66,8 +69,14 @@ public class TranslucentWindow extends JFrame {
     	super.dispose();
     }
     
-    public void setupClickedButton(){
+    /**
+     * 
+     * @param serial true si c'est une séquence de clic
+     */
+    public void setupClickedButton(boolean serial){
 		cont.setButton(button, buttonType, getTempXY());
+		// on continu tant que l'utilisateur n'a pas fait un clic sans control
+		if(serial) return;
 		dispose();
 		cont=null;
 		if(setupButton!=null){
@@ -83,7 +92,7 @@ public class TranslucentWindow extends JFrame {
 
 	public void setTempXY(Point tempXY) {
 		this.tempXY = tempXY;
-		setupClickedButton();
+		setupClickedButton(false);
 	}
 	
     public Controller getCont() {
@@ -96,5 +105,18 @@ public class TranslucentWindow extends JFrame {
 
 	public void setSetupWindow(JButton s) {
 		this.setupButton=s;
+	}
+
+	public void setTempSerialXY(Point tempXY) {
+		this.tempXY = tempXY;
+		this.setVisible(false);
+		cont.getBot().mouseMove(this.tempXY.x, this.tempXY.y);
+		cont.getBot().mousePress(InputEvent.BUTTON1_MASK);
+		//cont.getBot().delay(Controller.DELAY_PRESS_CLICK);
+		cont.getBot().mouseRelease(InputEvent.BUTTON1_MASK);
+		this.requestFocus();
+		this.setVisible(true);
+		setupClickedButton(true);
+		this.requestFocus();
 	}
 }

@@ -1,5 +1,6 @@
 package control.listeners;
 
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -23,7 +24,11 @@ public class MouseDetect implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		window.setTempXY(e.getLocationOnScreen());
+		if(e.getButton() == MouseEvent.BUTTON3){
+			window.setTempSerialXY(e.getLocationOnScreen());
+		}else{
+			window.setTempXY(e.getLocationOnScreen());
+		}
 	}
 
 	@Override

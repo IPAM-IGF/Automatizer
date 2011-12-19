@@ -11,7 +11,7 @@ public class Case extends JPanel implements Comparable<Case>{
 	/**
 	 * Les paramètres lié au moteur (dimension du bloc
 	 */
-	public static final Dimension CASE_DIMENSION = new Dimension(5000,4000);
+	public static Dimension CASE_DIMENSION = null;// = new Dimension(5000,4000);
 	
 	
 	private static final Dimension DEFAULT_SIZE=new Dimension(40,40);

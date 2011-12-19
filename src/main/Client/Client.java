@@ -7,10 +7,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import display.TrayPopupMenu;
 import display.panels.Case;
 import display.panels.GlandPanel;
 import java.awt.BorderLayout;
@@ -20,6 +22,7 @@ import java.awt.event.ActionListener;
 import javax.swing.SwingConstants;
 
 import main.Automatizer;
+import main.Server;
 
 
 public class Client extends JFrame {
@@ -33,6 +36,7 @@ public class Client extends JFrame {
 		super();
 	}
 	public void createAndShowGUI() {
+		TrayPopupMenu popup = new TrayPopupMenu(Server.LOGO_URL,null, false);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		setSize(dim.width,dim.height-30);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,6 +85,10 @@ public class Client extends JFrame {
 		//loadingFrame.add(jp);
 		loadingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		loadingFrame.setVisible(true);
+		Asker.ip = JOptionPane.showInputDialog(null,
+				  "Information",
+				  "Server IP",
+				  JOptionPane.QUESTION_MESSAGE);
 		Asker asker = new Asker(jp, client,Worker.GET_GLAND_PANEL, true);
 	}
 }

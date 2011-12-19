@@ -59,7 +59,7 @@ public class ButtonSetup extends JFrame {
 		mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 2, 2));
 		
 		
-		for(int i=0;i<2;i++){
+		for(int i=0;i<3;i++){
 			JPanel panel = new JPanel();
 			panel.setLayout(gridBagLayout);
 			int ligne=1;
@@ -74,6 +74,12 @@ public class ButtonSetup extends JFrame {
 					cles=Controller.BUTTONS_ACQUISITION.keySet();
 					TitledBorder title = BorderFactory.createTitledBorder("Acquisition");
 					panel.setBorder(title);
+				}else{
+					if(i==2){
+						cles=Controller.BUTTONS_SAVEAS.keySet();
+						TitledBorder title = BorderFactory.createTitledBorder("Save As");
+						panel.setBorder(title);
+					}
 				}
 			}
 			for(String n:cles){

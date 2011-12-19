@@ -2,17 +2,18 @@ package control;
 
 import java.awt.Point;
 import java.awt.Robot;
+import java.util.ArrayList;
 
 import static java.awt.event.KeyEvent.*;
 
 
 public class ButtonTextItem extends ButtonItem {
 
-	public ButtonTextItem(Robot r, Point p) {
+	public ButtonTextItem(Robot r, ArrayList<Point> p) {
 		super(r, p);
 	}
 
-	public ButtonTextItem(Robot r, String n, Point p) {
+	public ButtonTextItem(Robot r, String n, ArrayList<Point> p) {
 		super(r, n, p);
 	}
 
@@ -20,6 +21,11 @@ public class ButtonTextItem extends ButtonItem {
 		super(r);
 	}
 	
+	public ButtonTextItem(Robot bot, String name, Point l) {
+		super(bot);
+		getPosition().add(l);
+	}
+
 	public void setText(String s){
 		int[] keyCodes=stringToKeyCodes(s);
 		leftClick();
@@ -54,7 +60,13 @@ public class ButtonTextItem extends ButtonItem {
 	}
 	
 	public String toString(){
-		return this.name+"::"+"ButtonTextItem::"+this.position.x+"//"+this.position.y;
+		String r = this.name+"::"+"ButtonTextItem::";
+		String separator = ";";
+		for(int i = 0; i<position.size();i++){
+			if(i == position.size()-1) separator = "";
+			r += this.position.get(i).x+"//"+this.position.get(i).y+separator;
+		}
+		return r;
 	}
 	public static int[] stringToKeyCodes(String s){
 		int[] keycodes=new int[s.length()];

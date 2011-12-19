@@ -9,7 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileWorker {
-
 	public static void writeTo(File f, String content, boolean append){
 		try {
 		    BufferedWriter out = new BufferedWriter(new FileWriter(f,append));
