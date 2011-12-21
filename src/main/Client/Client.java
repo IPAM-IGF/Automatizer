@@ -39,15 +39,15 @@ public class Client extends JFrame {
 		super();
 	}
 	public void createAndShowGUI() {
-		TrayPopupMenu popup = new TrayPopupMenu(Server.LOGO_URL,null, false);
+		TrayPopupMenu popup = new TrayPopupMenu(Server.LOGO_URL,null, false, this);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		setSize(dim.width,dim.height-30);
+		setSize(dim.width,dim.height-40);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setUndecorated(true);
 		setOpacity(0.9f);
 		glandPanel.setMouseOverOnly(true);
 		add(glandPanel);
-		setVisible(true);
+		//setVisible(true);
 		Timer refresh = new Timer(5000, new ActionListener() {
 			
 			@Override

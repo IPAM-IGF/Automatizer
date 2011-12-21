@@ -131,6 +131,8 @@ public class AutomatizerServer extends Thread{
 				Scripts.CONTROLLER.getBot().delay(Controller.DELAY_PRESS_CLICK);
 				Scripts.CONTROLLER.getBot().mouseRelease(InputEvent.BUTTON1_MASK);
 				break;
+			case Worker.GIVE_USER_CONTROL:
+				Scripts.REQUIRES_USER = true;break;
 			default: return null;
 			}
 			if(Scripts.REQUIRES_USER){

@@ -96,8 +96,13 @@ public class Scripts {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-				
-				
+				try {
+					CONTROLLER.focus("Save As Window");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				((ButtonTextItem)CONTROLLER.get("Save as")).setText(saveDir+"/"+saveName+"_I"+c.getNumero());
+				((ButtonItem)CONTROLLER.get("saveas OK")).leftClick();
 				c.setState(Case.DONE_STATE);
 				previousP = actualP;
 			}

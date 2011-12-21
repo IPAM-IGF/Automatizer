@@ -45,7 +45,7 @@ public class Controller {
 	public static final HashMap<String,String> BUTTONS_SAVEAS=new HashMap<String,String>();
 	static{
 		BUTTONS_SAVEAS.put("File name","ButtonTextItem");
-		BUTTONS_SAVEAS.put("OK","ButtonItem");
+		BUTTONS_SAVEAS.put("saveas OK","ButtonItem");
 		BUTTONS_SAVEAS.put("Save As Window","ButtonItem");
 		
 	}
@@ -268,7 +268,7 @@ public class Controller {
             return;
         }
         final Controller motor=new Controller(1);
-        TrayPopupMenu popup = new TrayPopupMenu(Server.LOGO_URL,motor,true);
+        TrayPopupMenu popup = new TrayPopupMenu(Server.LOGO_URL,motor,true,null);
 
         boolean setupIsOK=false;
         

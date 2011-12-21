@@ -21,6 +21,10 @@ import java.net.UnknownHostException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import main.Client.Asker;
+import main.Client.Client;
+import main.Client.Worker;
+
 import control.Controller;
 
 
@@ -32,15 +36,17 @@ public class TrayPopupMenu extends PopupMenu {
 	private MenuItem exitItem, setupKeyItem;
 	private Menu setupItem;
 	private Controller cont;
+	private Client client;
 	
-	public TrayPopupMenu(URL image, Controller cont, boolean isServer){
+	public TrayPopupMenu(URL image, Controller cont, boolean isServer, Client c){
 		super();
 		imageLoc=image;
 		this.cont=cont;
+		client = c;
 		// remplacer logo.png par image quand on exporte en jar
 		Image imm = (new ImageIcon(image)).getImage();
 		trayIcon =
-                new TrayIcon(imm, "Tray Icon", this);//createImage(imageLoc, "tray icon"));
+                new TrayIcon(imm, "Automatizer", this);//createImage(imageLoc, "tray icon"));
         final SystemTray tray = SystemTray.getSystemTray();
        
         if(isServer){
@@ -93,7 +99,31 @@ public class TrayPopupMenu extends PopupMenu {
 	        });
       	this.add(getIp);
         }else{
-        	 
+        	MenuItem statusItem = new MenuItem("Show/Hide Status");
+        	statusItem.addActionListener(new ActionListener() {
+
+	        	@Override
+	        	public void actionPerformed(ActionEvent e) {
+	        		if(client.isVisible()) client.setVisible(false);
+	        		else client.setVisible(true);
+	        	}
+	        });
+	        this.add(statusItem);
+	        MenuItem remoteItem = new MenuItem("Show/Hide Remote");
+	        remoteItem.addActionListener(new ActionListener() {
+
+	        	@Override
+	        	public void actionPerformed(ActionEvent e) {
+	        		if(Asker.REMOTE_CONTROLLER!=null){
+	        			Asker.REMOTE_CONTROLLER.dispose();
+	        			Asker.REMOTE_CONTROLLER = null;
+	        			//Asker ask = new Asker(null, client, Worker.STOP_USER_CONTROL, false, null);
+	        		}else{
+	        			Asker ask = new Asker(null, client, Worker.GIVE_USER_CONTROL, false, null);
+	        		}
+	        	}
+	        });
+	        this.add(remoteItem);
         }
         MenuItem exitItem = new MenuItem("Exit");
         exitItem.addActionListener(new ActionListener() {

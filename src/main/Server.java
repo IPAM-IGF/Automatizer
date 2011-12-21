@@ -169,7 +169,7 @@ public class Server {
         
         
         final Controller controller=new Controller(1);
-        TrayPopupMenu popup = new TrayPopupMenu(Server.LOGO_URL,controller, true);
+        TrayPopupMenu popup = new TrayPopupMenu(Server.LOGO_URL,controller, true, null);
         
         // Launch server and re launch it when it end
         server = new AutomatizerServer();

@@ -109,6 +109,7 @@ public class Asker extends Thread{
 	}
 
 	private void processObject(ServerResponse obj) {
+		if(obj==null) return;
 		switch(obj.getRequest()){
 		case Worker.GET_GLAND_PANEL:
 			clientWindow.setGlandPanel((GlandPanel) obj.getReturnObject());break;
