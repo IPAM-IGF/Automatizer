@@ -163,6 +163,7 @@ public class Controller {
 		String content="";
 		for(String name:buttons.keySet()){
 			ButtonItem item=buttons.get(name);
+			item.setName(name);
 			if(item instanceof ButtonTextItem)
 				content+=((ButtonTextItem)item).toString()+"\n";
 			else
@@ -215,6 +216,8 @@ public class Controller {
 		bot.mousePress(InputEvent.BUTTON1_MASK);
 		bot.delay(DELAY_PRESS_CLICK);
 		bot.mouseRelease(InputEvent.BUTTON1_MASK);
+		// On attend que la fenêtre soit bien en focus
+		bot.delay(1000);
 		/*looseFocus();
 		for(int i=0;i<numeroFenetre;i++){
 			bot.keyPress(KeyEvent.VK_ALT);

@@ -102,11 +102,15 @@ public class GlandZoneSelector extends JFrame{
 	protected void askForParametersAndBegin(final GlandPanel gpanel) {
 		final JFrame jf = new JFrame("Parameters");
 		jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		jf.setSize(500,142);
+		jf.setSize(500,160);
 		jf.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("max(5dlu;default)"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(73dlu;pref)"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("pref:grow"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("pref:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -179,25 +183,14 @@ public class GlandZoneSelector extends JFrame{
 			}
 		});
 		jf.getContentPane().add(button, "9, 5, center, center");
+		JLabel lblTime = new JLabel("Time / image (s)");
+		jf.getContentPane().add(lblTime, "3, 7, center, center");
 		
+		final JSpinner spinnerTime = new JSpinner();
+		spinnerTime.setModel(new SpinnerNumberModel(2, 2, 1000000, 20));
+		jf.getContentPane().add(spinnerTime, "5, 7, center, center");
 		JButton btnOk = new JButton("OK");
-		jf.getContentPane().add(btnOk, "3, 7, center, center");
-		btnOk.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				jf.dispose();
-				saveDirectory = new File(txtDirectory.getText());
-				Case.CASE_DIMENSION = new Dimension((Integer)spinnerX.getValue(),(Integer)spinnerY.getValue());
-				System.out.println(saveDirectory.getAbsolutePath()+"--"+ saveDirectory.getName());
-				Thread simpleA = new Thread(){
-					public void run(){
-						Scripts.simpleAcquisition(saveDirectory.getAbsolutePath(), saveDirectory.getName(),gpanel);
-					}
-				};
-				simpleA.start();
-			}
-		});
+		jf.getContentPane().add(btnOk, "3, 9, center, center");
 		JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			
@@ -207,7 +200,24 @@ public class GlandZoneSelector extends JFrame{
 				
 			}
 		});
-		jf.getContentPane().add(btnCancel, "5, 7, center, center");
+		jf.getContentPane().add(btnCancel, "5, 9, center, center");
+		btnOk.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				jf.dispose();
+				saveDirectory = new File(txtDirectory.getText());
+				Case.CASE_DIMENSION = new Dimension((Integer)spinnerX.getValue(),(Integer)spinnerY.getValue());
+				final int val = (Integer)spinnerTime.getValue();
+				System.out.println(saveDirectory.getAbsolutePath()+"--"+ saveDirectory.getName());
+				Thread simpleA = new Thread(){
+					public void run(){
+						Scripts.simpleAcquisition(saveDirectory.getAbsolutePath(), saveDirectory.getName(), val*1000, gpanel);
+					}
+				};
+				simpleA.start();
+			}
+		});
 		jf.setVisible(true);
 	}
 

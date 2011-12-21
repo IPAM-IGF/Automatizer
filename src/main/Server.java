@@ -174,7 +174,7 @@ public class Server {
         // Launch server and re launch it when it end
         server = new AutomatizerServer();
         server.start();
-        Timer refresh = new Timer(1000, new ActionListener() {
+        Timer refresh = new Timer(30, new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

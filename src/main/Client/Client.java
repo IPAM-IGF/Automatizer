@@ -31,6 +31,9 @@ public class Client extends JFrame {
 	
 	
 	private GlandPanel glandPanel;
+
+
+	public static boolean isPaused = false;
 	
 	public Client(){
 		super();
@@ -49,7 +52,9 @@ public class Client extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Asker asker = new Asker(null, getThis(),Worker.UPDATED_CASES, false);
+				Asker asker;
+				if(!isPaused)
+					asker = new Asker(null, getThis(),Worker.UPDATED_CASES, false);
 			}
 		});
 		refresh.start();
@@ -86,8 +91,8 @@ public class Client extends JFrame {
 		loadingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		loadingFrame.setVisible(true);
 		Asker.ip = JOptionPane.showInputDialog(null,
-				  "Information",
 				  "Server IP",
+				  "Information",
 				  JOptionPane.QUESTION_MESSAGE);
 		Asker asker = new Asker(jp, client,Worker.GET_GLAND_PANEL, true);
 	}

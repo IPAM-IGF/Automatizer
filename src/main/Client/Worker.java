@@ -12,10 +12,16 @@ public class Worker  implements Cloneable,Serializable{
 	// Commandes possibles
 	public static final String UPDATED_CASES = "update_case";
 	public static final String GET_GLAND_PANEL = "get_gland_panel";
+	public static final String GIVE_USER_CONTROL = "give_user_control";
+	public static final String STOP_USER_CONTROL = "stop_user_control";
+	public static final String NO_REQUEST = "no_request";
+	public static final String MOUSE_PRESSED = "mouse_pressed";
+	public static final String MOUSE_RELEASED = "mouse_released";
+	public static final String MOUSE_CLICKED = "mouse_clicked";
 	
 	
 	private byte[] buffer = new byte[65536];
-	
+	private Object sendObject;
 	
 	private String request="";
 	
@@ -45,5 +51,12 @@ public class Worker  implements Cloneable,Serializable{
 	}
 	public void setRequest(String request) {
 		this.request = request;
+	}
+	public Object getSendObject() {
+		return sendObject;
+	}
+
+	public void setSendObject(Object sObject) {
+		this.sendObject = sObject;
 	}
 }

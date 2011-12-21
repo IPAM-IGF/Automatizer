@@ -1,5 +1,7 @@
 package main.Client;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -29,10 +31,12 @@ public class Asker extends Thread{
 	private static int port = 4444;
 	public static String ip = "10.7.20.89";
 
+	// Remote controller
+	public static RemoteController REMOTE_CONTROLLER = null ;
 
 	// Infos à mettre à jours
 	private JProgressBar statusArea;
-	
+	private boolean DEBUG = false;
 	// Attributs
 	private Socket kkSocket = null;
 	private ObjectInputStream in = null;
@@ -42,34 +46,47 @@ public class Asker extends Thread{
 	private boolean displayClient = false;
 	private Client clientWindow;
 	
+	private Object localObject = null;
+	
 	public Asker(JProgressBar l, Client c, String r, boolean b){
 		super();
 		setStatusArea(l);
 		setClientWindow(c);
 		if(l!=null) l.setStringPainted(true);
 		displayClient = b;
+		localObject = null;
 		doAsk(r);
 		
+	}
+	public Asker(JProgressBar l, Client c, String r, boolean b,
+			Object obj) {
+		super();
+		setStatusArea(l);
+		setClientWindow(c);
+		if(l!=null) l.setStringPainted(true);
+		localObject = obj;
+		displayClient = b;
+		doAsk(r);
 	}
 	public void run(){
 		ServerResponse obj;
 		if(statusArea != null) statusArea.setString("Attempting to connect");
-		else System.out.println("Attempting to connect");
+		else if(DEBUG) System.out.println("Attempting to connect");
 		try {
             kkSocket = new Socket(ip, port);
             if(statusArea != null) statusArea.setString("Connected");
-            else System.out.println("Connected");
+            else if(DEBUG) System.out.println("Connected");
             in = new CustomObjectInputStream((kkSocket.getInputStream()));
 			out = new ObjectOutputStream(kkSocket.getOutputStream());
 			if(statusArea != null) statusArea.setString("Sending request");
-			else System.out.println("Sending request");
+			else if(DEBUG) System.out.println("Sending request");
 			out.writeObject(worker.clone());
 			if(statusArea != null) statusArea.setString("Retrieving informations");
-			else System.out.println("Retrieving informations");
+			else if(DEBUG) System.out.println("Retrieving informations");
 			obj = (ServerResponse)in.readObject();
 			processObject(obj);
 			if(statusArea != null) statusArea.setString("Done");
-			else System.out.println("Done");
+			else if(DEBUG) System.out.println("Done");
 			
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host: "+ip+".");
@@ -97,12 +114,24 @@ public class Asker extends Thread{
 			clientWindow.setGlandPanel((GlandPanel) obj.getReturnObject());break;
 		case Worker.UPDATED_CASES:
 			clientWindow.getGlandPanel().updateCasesColor((HashMap<String, Case>) obj.getReturnObject());break;
+		case Worker.GIVE_USER_CONTROL:
+			Client.isPaused = true;
+			if(REMOTE_CONTROLLER == null)
+				REMOTE_CONTROLLER = new RemoteController((byte[]) obj.getReturnObject(), clientWindow);
+			else
+				REMOTE_CONTROLLER.updateScreen((byte[]) obj.getReturnObject());
+			break;
+		default:
+			Client.isPaused = false;
+			break;
+			
 		}
 	}
 	
 	public void doAsk(String request){
 		worker = new Worker();
 		worker.setRequest(request);
+		if (localObject != null) worker.setSendObject(localObject);	
 		this.start();
 	}
 	public JProgressBar getStatusArea() {

@@ -29,10 +29,13 @@ public class Scripts {
 	private static int[] localisation = {0,0};
 	// Point de référence (1)
 	private static Point refPoint ;
+
+
+	public static boolean REQUIRES_USER = false;
 	
 	
 	// Prise d'image simple d'une tranche
-	public static void simpleAcquisition(String saveDir, String saveName, GlandPanel gpanel){
+	public static void simpleAcquisition(String saveDir, String saveName, int time_for_one_image, GlandPanel gpanel){
 		Point previousP = new Point();
 		Point actualP;
 		int moveX,moveY;
@@ -78,14 +81,21 @@ public class Scripts {
 				}
 				
 				// On prend l'image
-				CONTROLLER.get("Measure").leftClick();
+				CONTROLLER.get("Démarrer").leftClick();
 				try {
-					Thread.sleep(4000);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
+					Thread.sleep(time_for_one_image);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 				
-				
+				// Ajustement des contrastes par l'utilisateur
+				REQUIRES_USER = true;
+				while(REQUIRES_USER)
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				
 				
 				c.setState(Case.DONE_STATE);
@@ -104,16 +114,10 @@ public class Scripts {
 		
 	}
 	private static void moveMotor(int x, int y){
-		((ButtonTextItem)CONTROLLER.get("X step")).setText(""+Math.abs(x));
-		((ButtonTextItem)CONTROLLER.get("Y step")).setText(""+Math.abs(y));
-		if(x>0)
-			CONTROLLER.get("X ZoomIn").leftClick();
-		else if(x<0)
-			CONTROLLER.get("X ZoomOut").leftClick();
-		if(y>0)
-			CONTROLLER.get("Y ZoomIn").leftClick();
-		else if(y<0)
-			CONTROLLER.get("Y ZoomOut").leftClick();
+		//((ButtonTextItem)CONTROLLER.get("Y step")).setText("0");
+		((ButtonTextItem)CONTROLLER.get("X step")).setText(""+x);
+		((ButtonTextItem)CONTROLLER.get("Y step")).setText(""+y);
+		CONTROLLER.get("Move +").leftClick();
 	}
 	
 	public static Point getKeyForValue(int i, HashMap<Point, Integer> h){

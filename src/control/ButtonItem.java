@@ -109,4 +109,9 @@ public class ButtonItem implements ControllerItem{
 	public void addPosition(Point location) {
 		position.add(location);
 	}
+
+	public void setName(String n) {
+		name = n;
+		
+	}
 }
