@@ -1,6 +1,7 @@
 package main.Client;
 
 import java.awt.AWTException;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -42,10 +43,10 @@ public class RemoteController extends JFrame implements MouseListener,MouseMotio
 	public RemoteController(byte[] byteimg,Client c){
 		super("Remote server");
 		client = c;
-		setSize(800,600);
+		//setSize(800,600);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		addMouseListener(this);
-		setVisible(true);
+		
 		screenImage = new JLabel();
 	   addWindowListener(this);
 		updateScreen(byteimg);
@@ -74,25 +75,38 @@ public class RemoteController extends JFrame implements MouseListener,MouseMotio
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		double oriHeight = bimg.getHeight();
+		double oriWidth = bimg.getWidth();
+		Dimension local = Toolkit.getDefaultToolkit().getScreenSize();
+		int modHeight, modWidth;
+		double factor = oriHeight/oriWidth;
+		modWidth = 1024;
+		modHeight = (int)Math.round(factor * modWidth);
 		BufferedImage scaledImage = new BufferedImage(
-				800, 600, BufferedImage.TYPE_INT_ARGB);
+				modWidth, modHeight, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics2D = scaledImage.createGraphics();
 		graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
 				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-			graphics2D.drawImage(bimg, 0, 0, 800, 600, null);
+			graphics2D.drawImage(bimg, 0, 0, modWidth, modHeight, null);
 
 			// clean up
 
 			graphics2D.dispose();
-
+			setSize(modWidth,modHeight);
 
 		screenImage.setIcon(new javax.swing.ImageIcon(scaledImage));
+		if(!isVisible()){
+			setUndecorated(true);
+			setVisible(true);
+		}
+			
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if(wasClicked){
+			tim1.stop();
+			tim2.stop();
 			wasClicked = false ;
 			double x = e.getPoint().x;
 			double y = e.getPoint().y;
@@ -117,9 +131,10 @@ public class RemoteController extends JFrame implements MouseListener,MouseMotio
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		wasReleased = false;
 		final MouseEvent e1 = e;
 		// Pour éviter d'envoyer 2 requetes très rapproché si c'est un clic !
-		tim1 = new Timer(100,new ActionListener() {
+		tim1 = new Timer(400,new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -128,7 +143,10 @@ public class RemoteController extends JFrame implements MouseListener,MouseMotio
 					wasPressed = false;
 					wasClicked = true;
 					mouseClicked(e1);
+					wasClicked = false;
+					System.out.println("click");
 				}else{
+					System.out.println("press");
 					wasPressed = true;
 					double x = e1.getPoint().x;
 					double y = e1.getPoint().y;
@@ -149,12 +167,12 @@ public class RemoteController extends JFrame implements MouseListener,MouseMotio
 		wasReleased = true;
 		final MouseEvent e1 = e;
 		// Pour éviter d'envoyer 2 requetes très rapproché si c'est un clic !
-		tim2 = new Timer(100,new ActionListener() {
+		tim2 = new Timer(400,new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(wasPressed){
-					System.out.println("hah");
+					System.out.println("released");
 					double x = e1.getPoint().x;
 					double y = e1.getPoint().y;
 					x = x / ((double)getWidth()/100) ;
@@ -162,7 +180,7 @@ public class RemoteController extends JFrame implements MouseListener,MouseMotio
 					double[] pourcentFenetre = new double[]{x/100,y/100};
 					Asker ask = new Asker(null, client, Worker.MOUSE_RELEASED, false, pourcentFenetre);
 				}
-				wasPressed = false;
+				//wasPressed = false;
 				tim2.stop();
 			}
 		});
