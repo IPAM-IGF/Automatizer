@@ -45,7 +45,7 @@ public class Client extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setUndecorated(true);
 		setOpacity(0.9f);
-		glandPanel.setMouseOverOnly(true);
+		if(glandPanel!=null) glandPanel.setMouseOverOnly(true);
 		add(glandPanel);
 		//setVisible(true);
 		Timer refresh = new Timer(5000, new ActionListener() {

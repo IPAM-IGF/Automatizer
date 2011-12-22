@@ -30,7 +30,6 @@ public class Scripts {
 	// Point de référence (1)
 	private static Point refPoint ;
 
-
 	public static boolean REQUIRES_USER = false;
 	
 	
@@ -55,6 +54,7 @@ public class Scripts {
 		
 		for(Case c:collection){
 			if(c.getState().equals(Case.SELECTED_STATE)){
+				doWait();
 				c.setState(Case.RUNNING_STATE);
 				actualP = coord.get(c.getNumero());
 				if(c.getNumero()!=1){
@@ -72,6 +72,7 @@ public class Scripts {
 					moveMotor(moveX,moveY);
 					
 				}
+				doWait();
 				// On focus la fenêtre d'acquisition
 				try {
 					CONTROLLER.focus("acquisition");
@@ -87,22 +88,16 @@ public class Scripts {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				
 				// Ajustement des contrastes par l'utilisateur
 				REQUIRES_USER = true;
-				while(REQUIRES_USER)
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+				doWait();
 				try {
 					CONTROLLER.focus("Save As Window");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				((ButtonTextItem)CONTROLLER.get("Save as")).setText(saveDir+"/"+saveName+"_I"+c.getNumero());
-				((ButtonItem)CONTROLLER.get("saveas OK")).leftClick();
+				((ButtonItem)CONTROLLER.get("OK")).leftClick();
 				c.setState(Case.DONE_STATE);
 				previousP = actualP;
 			}
@@ -115,6 +110,16 @@ public class Scripts {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);
+		}
+		
+	}
+	private static void doWait() {
+		while(REQUIRES_USER){
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}

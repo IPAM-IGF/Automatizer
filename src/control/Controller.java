@@ -45,7 +45,7 @@ public class Controller {
 	public static final HashMap<String,String> BUTTONS_SAVEAS=new HashMap<String,String>();
 	static{
 		BUTTONS_SAVEAS.put("File name","ButtonTextItem");
-		BUTTONS_SAVEAS.put("saveas OK","ButtonItem");
+		BUTTONS_SAVEAS.put("OK","ButtonItem");
 		BUTTONS_SAVEAS.put("Save As Window","ButtonItem");
 		
 	}
@@ -74,6 +74,15 @@ public class Controller {
 	 */
 	
 	public static final int DELAY_PRESS_CLICK = 100;
+	
+	/**
+	 * Fenetre en focus
+	 * 
+	 */
+	public static String windowOnFocus = null;
+	public static final String MOTOR_WINDOW = "motor";
+	public static final String ACQUISITION_WINDOW = "acquisition";
+	public static final String SAVEAS_WINDOW = "saveas";
 	
 	/**
 	 * Attributs
@@ -106,8 +115,18 @@ public class Controller {
 	}
 	
 	public ButtonItem get(String s){
-		return buttons.get(s);
+		if(windowOnFocus==null) return null;
+		System.out.println(windowOnFocus+s);
+		return buttons.get(windowOnFocus+s);
 	}
+	
+	
+	/**
+	 * Definit le bouton à partir du fichier de config
+	 * @param name nom du bouton (+prefixe motor ou autre)
+	 * @param type type de bouton
+	 * @param pts liste des points à cliquer pour activer le bouton
+	 */
 	public void setButton(String name, String type, ArrayList<Point> pts) {
 		switch(type){
 		case "ButtonTextItem":
@@ -116,29 +135,32 @@ public class Controller {
 		case "ButtonItem":
 			buttons.put(name, new ButtonItem(bot,name,pts));
 			break;
-	}
+			
+		}
+		Controller.windowOnFocus = null ;
 		
 	}
 	public void setButton(String name,String type, Point location){
 		switch(type){
 			case "ButtonTextItem":
-				if(buttons.get(name) == null){
-					buttons.put(name, new ButtonTextItem(bot,name,location));
+				if(buttons.get(windowOnFocus+name) == null){
+					buttons.put(windowOnFocus+name, new ButtonTextItem(bot,name,location));
 					break;
 				}else{
-					buttons.get(name).addPosition(location);
+					buttons.get(windowOnFocus+name).addPosition(location);
 				}
 					
 				break;
 			case "ButtonItem":
-				if(buttons.get(name) == null){
-					buttons.put(name, new ButtonItem(bot,name,location));
+				if(buttons.get(windowOnFocus+name) == null){
+					buttons.put(windowOnFocus+name, new ButtonItem(bot,name,location));
 					break;
 				}else{
-					buttons.get(name).addPosition(location);
+					buttons.get(windowOnFocus+name).addPosition(location);
 				}
 				break;
 		}
+		Controller.windowOnFocus = null ;
 	}
 	
 	
@@ -169,6 +191,7 @@ public class Controller {
 			else
 				content+=item.toString()+"\n";
 		}
+		System.out.println(content+"----"+fname);
 		FileWorker.writeTo(new File(fname), content, false);
 	}
 	
@@ -202,14 +225,16 @@ public class Controller {
 	 */
 	public void focus(String window) throws Exception {
 		Point loc = null;
+		windowOnFocus = window ;
 		switch(window){
 		case "motor":
-			loc=buttons.get("Motor Window").getPosition().get(0);break;
+			loc=buttons.get(windowOnFocus+"Motor Window").getPosition().get(0);break;
 		case "acquisition":
-			loc=buttons.get("Acquisition Window").getPosition().get(0);break;
+			loc=buttons.get(windowOnFocus+"Acquisition Window").getPosition().get(0);break;
 		case "saveas":
-			buttons.get("Save As Window").leftClick();return;
+			buttons.get(windowOnFocus+"Save As Window").leftClick();return;
 		default:
+			windowOnFocus = null;
 			throw new Exception("Unknow window to focus ... ");	
 		}
 		bot.mouseMove(loc.x,loc.y+20);
@@ -228,7 +253,7 @@ public class Controller {
 	}
 	
 	public void resetButton(String button) {
-		ButtonItem b = buttons.get(button);
+		ButtonItem b = buttons.get(windowOnFocus+button);
 		if(b == null) return;
 		buttons.remove(button);
 		b.reset();

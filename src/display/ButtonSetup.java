@@ -86,15 +86,29 @@ public class ButtonSetup extends JFrame {
 				if(colonne==2){
 					ligne++;colonne=0;
 				}
+				switch(i){
+				case 0:Controller.windowOnFocus = Controller.MOTOR_WINDOW;break;
+				case 1:Controller.windowOnFocus = Controller.ACQUISITION_WINDOW;break;
+				case 2:Controller.windowOnFocus = Controller.SAVEAS_WINDOW;break;
+				
+				}
 				final JButton btn = new JButton(n);
 				if(getController().get(n)==null) btn.setBackground(UNDEFINED_BG);
 				else btn.setBackground(DEFINED_BG);
 				final String bname=n;
+				final int type = i;
 				btn.addActionListener(new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						setVisible(false);			
+						setVisible(false);
+						switch(type){
+						case 0:Controller.windowOnFocus = Controller.MOTOR_WINDOW;break;
+						case 1:Controller.windowOnFocus = Controller.ACQUISITION_WINDOW;break;
+						case 2:Controller.windowOnFocus = Controller.SAVEAS_WINDOW;break;
+						
+						}
+						
 						TranslucentWindow tw = new TranslucentWindow("PLease don't touch this until setup isn't complete", bname, Controller.BUTTONS_NAME_TYPE.get(bname), getController());
 		                tw.setSetupWindow(btn);
 						tw.setOpacity(0.10f);
@@ -106,6 +120,7 @@ public class ButtonSetup extends JFrame {
 				gbc_btnFde.gridx = colonne++;
 				gbc_btnFde.gridy = ligne;
 				panel.add(btn, gbc_btnFde);
+				Controller.windowOnFocus = null;
 			}
 			
 			mainPanel.add(panel);
