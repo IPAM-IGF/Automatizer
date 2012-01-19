@@ -112,11 +112,20 @@ public class TranslucentWindow extends JFrame {
 		this.setVisible(false);
 		cont.getBot().mouseMove(this.tempXY.x, this.tempXY.y);
 		cont.getBot().mousePress(InputEvent.BUTTON1_MASK);
-		//cont.getBot().delay(Controller.DELAY_PRESS_CLICK);
+		cont.getBot().delay(Controller.DELAY_PRESS_CLICK);
 		cont.getBot().mouseRelease(InputEvent.BUTTON1_MASK);
 		this.requestFocus();
 		this.setVisible(true);
 		setupClickedButton(true);
 		this.requestFocus();
+		final JFrame mf = this;
+		java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                mf.toFront();
+                mf.repaint();
+            }
+        });
+
 	}
 }
