@@ -111,7 +111,7 @@ public class ButtonSetup extends JFrame {
 						
 						TranslucentWindow tw = new TranslucentWindow("PLease don't touch this until setup isn't complete", bname, Controller.BUTTONS_NAME_TYPE.get(bname), getController());
 		                tw.setSetupWindow(btn);
-						tw.setOpacity(0.10f);
+						tw.setOpacity(1.0f);
 		                tw.setVisible(true);  		
 					}
 				});

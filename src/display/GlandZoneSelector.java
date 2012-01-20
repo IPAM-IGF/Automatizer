@@ -215,6 +215,7 @@ public class GlandZoneSelector extends JFrame{
 						Scripts.simpleAcquisition(saveDirectory.getAbsolutePath(), saveDirectory.getName(), val*1000, gpanel);
 					}
 				};
+				setExtendedState(JFrame.ICONIFIED);
 				simpleA.start();
 			}
 		});

@@ -152,6 +152,7 @@ public class Controller {
 					
 				break;
 			case "ButtonItem":
+				System.out.println("toto  "+buttons.get(windowOnFocus+name));
 				if(buttons.get(windowOnFocus+name) == null){
 					buttons.put(windowOnFocus+name, new ButtonItem(bot,name,location));
 					break;
@@ -160,7 +161,7 @@ public class Controller {
 				}
 				break;
 		}
-		Controller.windowOnFocus = null ;
+		//Controller.windowOnFocus = null ;
 	}
 	
 	

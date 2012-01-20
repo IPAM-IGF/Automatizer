@@ -137,6 +137,7 @@ public class AutomatizerServer extends Thread{
 			}
 			if(Scripts.REQUIRES_USER){
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				Scripts.CONTROLLER.getBot().delay(200);
 				ImageIO.write( Scripts.CONTROLLER.getBot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize())), "jpg", baos );
 				byte[] imageInByte = baos.toByteArray();
 				baos.flush();
