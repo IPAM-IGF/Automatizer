@@ -10,6 +10,8 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -28,7 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
-public class RemoteController extends JFrame implements MouseListener,MouseMotionListener, WindowListener {
+public class RemoteController extends JFrame implements MouseListener,MouseMotionListener,KeyListener, WindowListener {
 
 	protected boolean wasReleased = false;
 	protected boolean wasPressed = false;
@@ -46,7 +48,7 @@ public class RemoteController extends JFrame implements MouseListener,MouseMotio
 		//setSize(800,600);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		addMouseListener(this);
-		
+		addKeyListener(this);
 		screenImage = new JLabel();
 	   addWindowListener(this);
 		updateScreen(byteimg);
@@ -257,6 +259,29 @@ public class RemoteController extends JFrame implements MouseListener,MouseMotio
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+			dispose();
+			Asker.REMOTE_CONTROLLER = null;
+		}
+	}
+
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

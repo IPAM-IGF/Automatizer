@@ -82,7 +82,7 @@ public class Scripts {
 				}
 				
 				// On prend l'image
-				CONTROLLER.get("Démarrer").leftClick();
+				CONTROLLER.get("Demarrer").leftClick();
 				try {
 					Thread.sleep(time_for_one_image);
 				} catch (InterruptedException e) {
@@ -91,6 +91,8 @@ public class Scripts {
 				// Ajustement des contrastes par l'utilisateur
 				REQUIRES_USER = true;
 				doWait();
+				//Sauvegarde
+				CONTROLLER.get("Save as").leftClick();
 				try {
 					CONTROLLER.focus("Save As Window");
 				} catch (Exception e) {
