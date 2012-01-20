@@ -94,7 +94,7 @@ public class Scripts {
 				//Sauvegarde
 				CONTROLLER.get("Save as").leftClick();
 				try {
-					CONTROLLER.focus("Save As Window");
+					CONTROLLER.focus("saveas");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
