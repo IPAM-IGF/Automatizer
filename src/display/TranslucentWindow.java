@@ -3,7 +3,12 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.InputEvent;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import control.Controller;
@@ -24,7 +29,7 @@ public class TranslucentWindow extends JFrame {
 	private JWindow dialogFrame;
 	private JLabel txtAide;
 	private String button;
-	
+	private JLabel screenImage;
 	// Type de bouton 
 	private String buttonType;
 	
@@ -40,6 +45,7 @@ public class TranslucentWindow extends JFrame {
     public TranslucentWindow(String title, String button, String type, Controller c) {
     	super(title);
     	cont=c;
+    	 screenImage = new JLabel();
     	buttonType=type;
     	this.button=button;
     	cont.resetButton(this.button);
@@ -53,6 +59,7 @@ public class TranslucentWindow extends JFrame {
         addMouseListener(new MouseDetect(this));
         getContentPane().addKeyListener(new KeyDetect(this));
         getContentPane().setFocusable(true);
+        updateScreen(cont.getBot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize())));
         dialogFrame=new JWindow(this);
         txtAide=new JLabel(MSG+this.button);
         dialogFrame.add(txtAide);
@@ -62,6 +69,7 @@ public class TranslucentWindow extends JFrame {
       //  dialogFrame.setUndecorated(true);
         dialogFrame.setOpacity(0.80f);
         dialogFrame.setVisible(true);
+        add(screenImage);
     }
     
     public void dispose(){
@@ -110,13 +118,41 @@ public class TranslucentWindow extends JFrame {
 	public void setTempSerialXY(Point tempXY) {
 		this.tempXY = tempXY;
 		this.setVisible(false);
+		cont.get(button).leftClick();
+		cont.getBot().delay(Controller.DELAY_PRESS_CLICK);
 		cont.getBot().mouseMove(this.tempXY.x, this.tempXY.y);
 		cont.getBot().mousePress(InputEvent.BUTTON1_MASK);
-		//cont.getBot().delay(Controller.DELAY_PRESS_CLICK);
+		cont.getBot().delay(Controller.DELAY_PRESS_CLICK);
 		cont.getBot().mouseRelease(InputEvent.BUTTON1_MASK);
+		updateScreen(cont.getBot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize())));
 		this.requestFocus();
 		this.setVisible(true);
 		setupClickedButton(true);
 		this.requestFocus();
+		final JFrame mf = this;
+		java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                mf.toFront();
+                mf.repaint();
+            }
+        });
+
+	}
+	
+	public void updateScreen(BufferedImage bimg) {
+
+		double oriHeight = bimg.getHeight();
+		double oriWidth = bimg.getWidth();
+		Dimension local = Toolkit.getDefaultToolkit().getScreenSize();
+		int modHeight, modWidth;
+		double factor = oriHeight/oriWidth;
+
+		screenImage.setIcon(new javax.swing.ImageIcon(bimg));
+		/*if(!isVisible()){
+			setUndecorated(true);
+			setVisible(true);
+		}*/
+			
 	}
 }
