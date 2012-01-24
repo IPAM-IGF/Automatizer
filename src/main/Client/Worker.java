@@ -18,6 +18,7 @@ public class Worker  implements Cloneable,Serializable{
 	public static final String MOUSE_PRESSED = "mouse_pressed";
 	public static final String MOUSE_RELEASED = "mouse_released";
 	public static final String MOUSE_CLICKED = "mouse_clicked";
+	public static final String KEY_EVENT = "0-9 key typed";
 	
 	
 	private byte[] buffer = new byte[65536];

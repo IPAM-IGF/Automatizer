@@ -1,6 +1,7 @@
 package tools;
 
 import java.awt.Point;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -17,13 +18,6 @@ import display.panels.GlandPanel;
 
 public class Scripts {
 	public static Controller CONTROLLER;
-	
-	
-	// Direction du parcours
-	private static final int RIGHT = 1;
-	private static final int DOWN = 2;
-	private static final int LEFT = 3;
-	private static final int UP = 4;
 	
 	// Coordonnées relatif au point 1 du moteur (X,Y)
 	private static int[] localisation = {0,0};
@@ -70,7 +64,8 @@ public class Scripts {
 					localisation[0] = ((actualP.x-refPoint.x)*Case.CASE_DIMENSION.width);
 					localisation[1] = ((actualP.y-refPoint.y)*Case.CASE_DIMENSION.height);
 					moveMotor(moveX,moveY);
-					
+					// On attend la fin du d�placement
+					CONTROLLER.getBot().delay(5000);
 				}
 				doWait();
 				// On focus la fenêtre d'acquisition
@@ -81,8 +76,10 @@ public class Scripts {
 					System.exit(0);
 				}
 				
+				// On ferme les fenetres
+				CONTROLLER.get("Close all windows").leftClick();
 				// On prend l'image
-				CONTROLLER.get("Demarrer").leftClick();
+				CONTROLLER.get("Start").leftClick();
 				try {
 					Thread.sleep(time_for_one_image);
 				} catch (InterruptedException e) {
@@ -98,10 +95,12 @@ public class Scripts {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				((ButtonTextItem)CONTROLLER.get("Save as")).setText(saveDir+"/"+saveName+"_I"+c.getNumero());
+				((ButtonTextItem)CONTROLLER.get("File name")).setText(saveDir+File.separator+saveName+"_I"+c.getNumero());
 				((ButtonItem)CONTROLLER.get("OK")).leftClick();
+				CONTROLLER.getBot().delay(2000);
 				c.setState(Case.DONE_STATE);
 				previousP = actualP;
+				
 			}
 			
 		}

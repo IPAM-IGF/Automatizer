@@ -38,7 +38,8 @@ public class Controller {
 	 */
 	public static final HashMap<String,String> BUTTONS_ACQUISITION=new HashMap<String,String>();
 	static{
-		BUTTONS_ACQUISITION.put("Demarrer","ButtonItem");
+		BUTTONS_ACQUISITION.put("Close all windows","ButtonItem");
+		BUTTONS_ACQUISITION.put("Start","ButtonItem");
 		BUTTONS_ACQUISITION.put("Save as","ButtonItem");
 		BUTTONS_ACQUISITION.put("Acquisition Window","ButtonItem");
 	}

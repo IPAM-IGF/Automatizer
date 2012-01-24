@@ -269,6 +269,10 @@ public class RemoteController extends JFrame implements MouseListener,MouseMotio
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
 			dispose();
 			Asker.REMOTE_CONTROLLER = null;
+			return;
+		}
+		if(e.getKeyCode()<=KeyEvent.VK_9 && e.getKeyCode()>=KeyEvent.VK_0){
+			Asker ask = new Asker(null, client, Worker.KEY_EVENT, false, e.getKeyCode());
 		}
 	}
 
