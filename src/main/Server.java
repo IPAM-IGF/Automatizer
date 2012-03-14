@@ -165,7 +165,7 @@ public class Server {
         // Detect the path to the jar file
         //setConfFile();
         // Simulation 
-        getSimulationWindows();
+       // getSimulationWindows();
         
         
         final Controller controller=new Controller(1);

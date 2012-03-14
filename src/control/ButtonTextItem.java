@@ -42,7 +42,10 @@ public class ButtonTextItem extends ButtonItem {
 	public void clearContent() {
 		leftClick();
 		multiClick(new int[]{VK_CONTROL,VK_A});
-		keyClick(VK_BACK_SPACE);
+		for(int i=0;i<40;i++)
+			keyClick(VK_BACK_SPACE);
+		for(int i=0;i<40;i++)
+			keyClick(VK_DELETE);
 	}
 	protected void keyClick(int key){
 		// key original

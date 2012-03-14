@@ -27,7 +27,7 @@ import main.Server;
 
 public class Client extends JFrame {
 	// Loading frame used in main
-	private static JFrame loadingFrame;
+	public static JFrame loadingFrame;
 	
 	
 	private GlandPanel glandPanel;
@@ -58,6 +58,16 @@ public class Client extends JFrame {
 			}
 		});
 		refresh.start();
+		/*Timer updateRemoteScreen = new Timer(1000, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Asker asker;
+				if(Asker.REMOTE_CONTROLLER!=null)
+					asker = new Asker(null, getThis(),Worker.UPDATE_SCREEN_REMOTE, false);
+			}
+		});
+		updateRemoteScreen.start();*/
 	}
 	public GlandPanel getGlandPanel() {
 		return glandPanel;
@@ -66,6 +76,7 @@ public class Client extends JFrame {
 		this.glandPanel = g;
 		//repaint();
 		if(loadingFrame!=null){
+			loadingFrame.setVisible(false);
 			loadingFrame.dispose();
 			loadingFrame = null;
 		}

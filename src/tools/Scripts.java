@@ -75,9 +75,21 @@ public class Scripts {
 					e.printStackTrace();
 					System.exit(0);
 				}
-				
+				pause(5000);
 				// On ferme les fenetres
 				CONTROLLER.get("Close all windows").leftClick();
+				//Expo
+				CONTROLLER.get("chan1").leftClick();
+				pause(1000);
+				CONTROLLER.get("Expo measure").leftClick();
+				pause(8000);
+				CONTROLLER.get("Expo OK").leftClick();
+				CONTROLLER.get("chan2").leftClick();
+				pause(1000);
+				CONTROLLER.get("Expo measure").leftClick();
+				pause(8000);
+				CONTROLLER.get("Expo OK").leftClick();
+				
 				// On prend l'image
 				CONTROLLER.get("Start").leftClick();
 				try {
@@ -86,7 +98,20 @@ public class Scripts {
 					e.printStackTrace();
 				}
 				// Ajustement des contrastes par l'utilisateur
-				REQUIRES_USER = true;
+				/*REQUIRES_USER = true;*/
+				doWait();
+				//Gaussian filtering
+				CONTROLLER.get("Gaussian filter").leftClick();
+				pause(10000);
+				doWait();
+				CONTROLLER.get("Gaussian filter OK").leftClick();
+				pause(8000);
+				doWait();
+				CONTROLLER.get("8 bits").leftClick();
+				pause(1500);
+				doWait();
+				CONTROLLER.get("Min/Max").leftClick();
+				pause(1500);
 				doWait();
 				//Sauvegarde
 				CONTROLLER.get("Save as").leftClick();
@@ -97,6 +122,7 @@ public class Scripts {
 				}
 				((ButtonTextItem)CONTROLLER.get("File name")).setText(saveDir+File.separator+saveName+"_I"+c.getNumero());
 				((ButtonItem)CONTROLLER.get("OK")).leftClick();
+				pause(30000);
 				CONTROLLER.getBot().delay(2000);
 				c.setState(Case.DONE_STATE);
 				previousP = actualP;
@@ -116,11 +142,7 @@ public class Scripts {
 	}
 	private static void doWait() {
 		while(REQUIRES_USER){
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			pause(500);
 		}
 		
 	}
@@ -130,7 +152,13 @@ public class Scripts {
 		((ButtonTextItem)CONTROLLER.get("Y step")).setText(""+y);
 		CONTROLLER.get("Move +").leftClick();
 	}
-	
+	public static void pause(int msec){
+		try {
+			Thread.sleep(msec);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 	public static Point getKeyForValue(int i, HashMap<Point, Integer> h){
 		for(Point p:h.keySet())
 			if(h.get(p) == i) return p;

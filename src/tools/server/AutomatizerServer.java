@@ -1,5 +1,18 @@
 package tools.server;
 
+import static java.awt.event.KeyEvent.VK_0;
+import static java.awt.event.KeyEvent.VK_6;
+import static java.awt.event.KeyEvent.VK_8;
+import static java.awt.event.KeyEvent.VK_9;
+import static java.awt.event.KeyEvent.VK_ALT;
+import static java.awt.event.KeyEvent.VK_COLON;
+import static java.awt.event.KeyEvent.VK_CONTROL;
+import static java.awt.event.KeyEvent.VK_MINUS;
+import static java.awt.event.KeyEvent.VK_PERIOD;
+import static java.awt.event.KeyEvent.VK_SEMICOLON;
+import static java.awt.event.KeyEvent.VK_SHIFT;
+import static java.awt.event.KeyEvent.VK_UNDERSCORE;
+
 import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -94,6 +107,7 @@ public class AutomatizerServer extends Thread{
 			Worker w = (Worker)obj;
 			resp = new ServerResponse();
 			resp.setRequest(w.getRequest());
+			System.out.println("Received "+w.getRequest());
 			switch(w.getRequest()){
 			case Worker.GET_GLAND_PANEL:
 				resp.setReturnObject(GlandZoneSelector.currentPanel);break;
@@ -133,13 +147,25 @@ public class AutomatizerServer extends Thread{
 				break;
 			case Worker.KEY_EVENT:
 				int keyValue = (int) w.getSendObject();
-				Scripts.CONTROLLER.getBot().delay(Controller.DELAY_PRESS_CLICK);
+				keyClick(keyValue);
+				/*Scripts.CONTROLLER.getBot().delay(Controller.DELAY_PRESS_CLICK);
 				Scripts.CONTROLLER.getBot().keyPress(keyValue);
 				Scripts.CONTROLLER.getBot().delay(Controller.DELAY_PRESS_CLICK);
-				Scripts.CONTROLLER.getBot().keyRelease(keyValue);
+				Scripts.CONTROLLER.getBot().keyRelease(keyValue);*/
 				break;
 			case Worker.GIVE_USER_CONTROL:
 				Scripts.REQUIRES_USER = true;break;
+				//w.setRequest(Worker.UPDATE_SCREEN_REMOTE);
+			case Worker.UPDATE_SCREEN_REMOTE:
+				/*ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				Scripts.CONTROLLER.getBot().delay(200);
+				ImageIO.write( Scripts.CONTROLLER.getBot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize())), "jpg", baos );
+				byte[] imageInByte = baos.toByteArray();
+				baos.flush();
+				baos.close();
+				System.out.println("Image length : "+imageInByte.length);
+				resp.setReturnObject(imageInByte);
+				break;*/
 			default: return null;
 			}
 			if(Scripts.REQUIRES_USER){
@@ -154,5 +180,42 @@ public class AutomatizerServer extends Thread{
 			}
 		}
 		return resp;
+	}
+	
+	protected void keyClick(int key){
+		// key original
+		int okey = key;
+		// > 20000 si c'est une majuscule
+		if(key >= VK_0 && key <= VK_9 || VK_PERIOD==key || key > 20000)
+			Scripts.CONTROLLER.getBot().keyPress(VK_SHIFT);
+		if(key > 20000) key = key - 20000;
+		// Si c'est un slash
+		if(key == 10001){
+			Scripts.CONTROLLER.getBot().keyPress(VK_SHIFT);
+			key = VK_COLON;
+		} 
+		// Si c'est un anti slash
+		if(okey == 10002){
+			Scripts.CONTROLLER.getBot().keyPress(VK_CONTROL);
+			Scripts.CONTROLLER.getBot().keyPress(VK_ALT);
+			key = VK_8;
+		}
+		// Si c'est un underscore
+		if(okey == VK_UNDERSCORE)
+			key = VK_8;
+		if(okey == VK_MINUS)
+			key = VK_6;
+		// Si c'est un point
+		if(VK_PERIOD==key)
+			key = VK_SEMICOLON;
+		Scripts.CONTROLLER.getBot().keyPress(key);
+		Scripts.CONTROLLER.getBot().delay(Controller.DELAY_PRESS_CLICK);
+		Scripts.CONTROLLER.getBot().keyRelease(key);
+		if(key >= VK_0 && key <= VK_9 || key == 10001 || VK_PERIOD == okey  || okey > 20000)
+			Scripts.CONTROLLER.getBot().keyRelease(VK_SHIFT);
+		if(okey == 10002){
+			Scripts.CONTROLLER.getBot().keyRelease(VK_CONTROL);
+			Scripts.CONTROLLER.getBot().keyRelease(VK_ALT);
+		}
 	}
 }

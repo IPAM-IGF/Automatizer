@@ -42,6 +42,14 @@ public class Controller {
 		BUTTONS_ACQUISITION.put("Start","ButtonItem");
 		BUTTONS_ACQUISITION.put("Save as","ButtonItem");
 		BUTTONS_ACQUISITION.put("Acquisition Window","ButtonItem");
+		BUTTONS_ACQUISITION.put("chan1","ButtonItem");
+		BUTTONS_ACQUISITION.put("chan2","ButtonItem");
+		BUTTONS_ACQUISITION.put("Expo measure","ButtonItem");
+		BUTTONS_ACQUISITION.put("Expo OK","ButtonItem");
+		BUTTONS_ACQUISITION.put("Gaussian filter","ButtonItem");
+		BUTTONS_ACQUISITION.put("Gaussian filter OK","ButtonItem");
+		BUTTONS_ACQUISITION.put("8 bits","ButtonItem");
+		BUTTONS_ACQUISITION.put("Min/Max","ButtonItem");
 	}
 	public static final HashMap<String,String> BUTTONS_SAVEAS=new HashMap<String,String>();
 	static{
@@ -60,6 +68,8 @@ public class Controller {
 		BUTTONS_MOTOR.put("Y step","ButtonTextItem");
 		BUTTONS_MOTOR.put("Motor Window","ButtonItem");
 	}
+
+	
 	
 	public static final HashMap<String,String> BUTTONS_NAME_TYPE=new HashMap<String,String>();
 	

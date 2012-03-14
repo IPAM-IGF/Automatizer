@@ -6,6 +6,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import tools.Scripts;
+
 import display.TranslucentWindow;
 
 public class ButtonItem implements ControllerItem{
@@ -52,8 +54,9 @@ public class ButtonItem implements ControllerItem{
 	@Override
 	public void rightClick(){
 		for(int i=0; i < position.size(); i ++){
-			if(i!=0) bot.delay(Controller.DELAY_PRESS_CLICK);
+			Scripts.pause(1000);
 			bot.mouseMove(position.get(i).x, position.get(i).y);
+			Scripts.pause(1000);
 			bot.mousePress(RIGHT_C);
 			bot.delay(Controller.DELAY_PRESS_CLICK);
 			bot.mouseRelease(RIGHT_C);
@@ -63,8 +66,9 @@ public class ButtonItem implements ControllerItem{
 	@Override
 	public void leftClick(){
 		for(int i=0; i < position.size(); i ++){
-			if(i!=0) bot.delay(Controller.DELAY_PRESS_CLICK);
+			Scripts.pause(1000);
 			bot.mouseMove(position.get(i).x, position.get(i).y);
+			Scripts.pause(1000);
 			bot.mousePress(LEFT_C);
 			bot.delay(Controller.DELAY_PRESS_CLICK);
 			bot.mouseRelease(LEFT_C);

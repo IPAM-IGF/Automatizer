@@ -135,7 +135,7 @@ public class GlandZoneSelector extends JFrame{
 		
 		JLabel lblSizeOfOne = new JLabel("Size of one block");
 		jf.getContentPane().add(lblSizeOfOne, "3, 3, center, center");
-		Dimension caseDim = new Dimension(2000,2000);
+		Dimension caseDim = new Dimension(4000,5000);
 		if(Case.CASE_DIMENSION != null) caseDim = Case.CASE_DIMENSION;
 		final JSpinner spinnerX = new JSpinner();
 		spinnerX.setModel(new SpinnerNumberModel(caseDim.width, 10, 100000, 10));
@@ -187,7 +187,7 @@ public class GlandZoneSelector extends JFrame{
 		jf.getContentPane().add(lblTime, "3, 7, center, center");
 		
 		final JSpinner spinnerTime = new JSpinner();
-		spinnerTime.setModel(new SpinnerNumberModel(2, 2, 1000000, 20));
+		spinnerTime.setModel(new SpinnerNumberModel(180, 2, 1000000, 20));
 		jf.getContentPane().add(spinnerTime, "5, 7, center, center");
 		JButton btnOk = new JButton("OK");
 		jf.getContentPane().add(btnOk, "3, 9, center, center");

@@ -28,7 +28,9 @@ import tools.server.ServerResponse;
 public class Asker extends Thread{
 	
 	// Infos sur le serveur
-	private static int port = 4444;
+	private static int port = 4444; // port pour les commandes de l'utilisateur (clic, etc)
+	private static int port2 = 4445; // port pour la mise à jours de l'écran distant
+	
 	public static String ip = "10.7.20.89";
 
 	// Remote controller
@@ -73,7 +75,10 @@ public class Asker extends Thread{
 		if(statusArea != null) statusArea.setString("Attempting to connect");
 		else if(DEBUG) System.out.println("Attempting to connect");
 		try {
-            kkSocket = new Socket(ip, port);
+           /* if(worker.getRequest().equals(Worker.UPDATE_SCREEN_REMOTE))
+            	kkSocket = new Socket(ip, port2);
+            else*/ ///PEUT ETRE MAJ
+            	kkSocket = new Socket(ip, port);
             if(statusArea != null) statusArea.setString("Connected");
             else if(DEBUG) System.out.println("Connected");
             in = new CustomObjectInputStream((kkSocket.getInputStream()));
@@ -87,7 +92,7 @@ public class Asker extends Thread{
 			processObject(obj);
 			if(statusArea != null) statusArea.setString("Done");
 			else if(DEBUG) System.out.println("Done");
-			
+			if(Client.loadingFrame != null && Client.loadingFrame.isVisible()) Client.loadingFrame.dispose();
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host: "+ip+".");
             System.exit(1);
@@ -120,6 +125,9 @@ public class Asker extends Thread{
 			if(REMOTE_CONTROLLER == null)
 				REMOTE_CONTROLLER = new RemoteController((byte[]) obj.getReturnObject(), clientWindow);
 			else
+				REMOTE_CONTROLLER.updateScreen((byte[]) obj.getReturnObject());
+			break;
+		case Worker.UPDATE_SCREEN_REMOTE : 
 				REMOTE_CONTROLLER.updateScreen((byte[]) obj.getReturnObject());
 			break;
 		default:
