@@ -60,9 +60,9 @@ public class Scripts {
 						System.exit(0);
 					}
 					moveX = ((actualP.x-refPoint.x)*Case.CASE_DIMENSION.width)-localisation[0];
-					moveY = ((actualP.y-refPoint.y)*Case.CASE_DIMENSION.height)-localisation[1];
+					moveY = ((refPoint.y-actualP.y)*Case.CASE_DIMENSION.height)-localisation[1];
 					localisation[0] = ((actualP.x-refPoint.x)*Case.CASE_DIMENSION.width);
-					localisation[1] = ((actualP.y-refPoint.y)*Case.CASE_DIMENSION.height);
+					localisation[1] = ((refPoint.y-actualP.y)*Case.CASE_DIMENSION.height);
 					moveMotor(moveX,moveY);
 					// On attend la fin du déplacement
 					CONTROLLER.getBot().delay(5000);

@@ -33,7 +33,7 @@ public class Spiral {
     private final int   xCenter;
     private final int   yCenter;
     private Point		point;
-    private Direction	direction	= Direction.E;
+    private Direction	direction	= Direction.S;
     private List<Point>	list = new ArrayList<Point>();
 
     public Spiral(int width, int height, int xC, int yC) {

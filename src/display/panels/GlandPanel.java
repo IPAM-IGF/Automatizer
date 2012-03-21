@@ -47,13 +47,15 @@ public class GlandPanel extends JPanel{
 		int count=0;
 		for(int i=0;i<grilleGlande.width;i++){
         	for(int j=0;j<grilleGlande.height;j++){
-        		Case c=new Case(Math.round(cellWidth), Math.round(cellHeight),coordSpiral.get(new Point(i,j)));
-        		c.addMouseListener(new MouseCase());
-        		GridBagConstraints gbc_c = new GridBagConstraints();
-        		gbc_c.gridx = i;
-        		gbc_c.gridy = j;
-        		add(c, gbc_c);
-        		listCases.put(""+(count++), c);
+        		try{
+        			Case c=new Case(Math.round(cellWidth), Math.round(cellHeight),coordSpiral.get(new Point(i,j)));
+	        		c.addMouseListener(new MouseCase());
+	        		GridBagConstraints gbc_c = new GridBagConstraints();
+	        		gbc_c.gridx = i;
+	        		gbc_c.gridy = j;
+	        		add(c, gbc_c);
+	        		listCases.put(""+(count++), c);
+	        	}catch(Exception e){}
         	}
         }
 		
@@ -83,8 +85,10 @@ public class GlandPanel extends JPanel{
         int count=0;
         for(int i=0;i<grilleGlande.width;i++){
         	for(int j=0;j<grilleGlande.height;j++){
-        		listCases.get(""+(count)).setSize(Math.round(cellWidth), Math.round(cellHeight));
-        		listCases.get(""+(count++)).setLocation((int)Math.round(i*cellWidth)+5, (int)Math.round(j*cellHeight));
+        		try{
+        			listCases.get(""+(count)).setSize(Math.round(cellWidth), Math.round(cellHeight));
+        			listCases.get(""+(count++)).setLocation((int)Math.round(i*cellWidth)+5, (int)Math.round(j*cellHeight));
+        		}catch(Exception e){}
         	}
         }
 
