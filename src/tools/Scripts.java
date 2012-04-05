@@ -37,7 +37,8 @@ public class Scripts {
 		List<Case> collection = new ArrayList<Case>(gpanel.getListCases().values());
 		Collections.sort((List)collection);
 		refPoint = coord.get(1);
-		
+		localisation[0] = 0;
+		localisation[1] = 0;
 		// fait une pause de 2 s avant de commencer
 		// pour Ã©viter les conflits avec l'utilisateur
 		try {
@@ -63,7 +64,8 @@ public class Scripts {
 					moveY = ((refPoint.y-actualP.y)*Case.CASE_DIMENSION.height)-localisation[1];
 					localisation[0] = ((actualP.x-refPoint.x)*Case.CASE_DIMENSION.width);
 					localisation[1] = ((refPoint.y-actualP.y)*Case.CASE_DIMENSION.height);
-					moveMotor(moveX,moveY);
+					// on inverse le X Y car le moteur est inversé
+					moveMotor(moveY,moveX);
 					// On attend la fin du déplacement
 					CONTROLLER.getBot().delay(5000);
 				}
@@ -131,7 +133,14 @@ public class Scripts {
 			
 		}
 		// On se replace dans la position d'origine
-		moveMotor(-localisation[0],-localisation[1]);
+		try {
+			CONTROLLER.focus("motor");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+		// On inverse le déplacement du moteur
+		moveMotor(-localisation[1],-localisation[0]);
 		try {
 			CONTROLLER.focus("acquisition");
 		} catch (Exception e) {
@@ -148,6 +157,9 @@ public class Scripts {
 	}
 	private static void moveMotor(int x, int y){
 		//((ButtonTextItem)CONTROLLER.get("Y step")).setText("0");
+		// on inverse la valeur de y comme le moteur est inversé (+5000 = un déplacement vers la gauche sur le moteur et pas vers la droite....)
+		y = -y;
+		System.out.println("move : "+x+"--"+y);
 		((ButtonTextItem)CONTROLLER.get("X step")).setText(""+x);
 		((ButtonTextItem)CONTROLLER.get("Y step")).setText(""+y);
 		CONTROLLER.get("Move +").leftClick();

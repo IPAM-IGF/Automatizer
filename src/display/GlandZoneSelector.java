@@ -135,7 +135,7 @@ public class GlandZoneSelector extends JFrame{
 		
 		JLabel lblSizeOfOne = new JLabel("Size of one block");
 		jf.getContentPane().add(lblSizeOfOne, "3, 3, center, center");
-		Dimension caseDim = new Dimension(4000,5000);
+		Dimension caseDim = new Dimension(5000,4000);
 		if(Case.CASE_DIMENSION != null) caseDim = Case.CASE_DIMENSION;
 		final JSpinner spinnerX = new JSpinner();
 		spinnerX.setModel(new SpinnerNumberModel(caseDim.width, 10, 100000, 10));

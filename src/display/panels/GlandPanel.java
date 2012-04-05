@@ -20,7 +20,7 @@ import java.util.List;
 public class GlandPanel extends JPanel{
 
 	// dimension de la grille dans laquelle est contenu la glande (X,Y)
-	private static final Dimension grilleGlande=new Dimension(20,10);
+	private static final Dimension grilleGlande=new Dimension(30,15);
 	
 	// Collection des cases
 	private HashMap<String, Case> listCases;
