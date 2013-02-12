@@ -49,7 +49,8 @@ public class Controller {
 		BUTTONS_ACQUISITION.put("Gaussian filter","ButtonItem");
 		BUTTONS_ACQUISITION.put("Gaussian filter OK","ButtonItem");
 		BUTTONS_ACQUISITION.put("8 bits","ButtonItem");
-		BUTTONS_ACQUISITION.put("Min/Max","ButtonItem");
+		BUTTONS_ACQUISITION.put("Lineaire","ButtonItem");
+		BUTTONS_ACQUISITION.put("RGB On/Off","ButtonItem");
 	}
 	public static final HashMap<String,String> BUTTONS_SAVEAS=new HashMap<String,String>();
 	static{

@@ -81,7 +81,7 @@ public class Scripts {
 				// On ferme les fenetres
 				CONTROLLER.get("Close all windows").leftClick();
 				//Expo
-				CONTROLLER.get("chan1").leftClick();
+				/*CONTROLLER.get("chan1").leftClick();
 				pause(1000);
 				CONTROLLER.get("Expo measure").leftClick();
 				pause(8000);
@@ -91,7 +91,7 @@ public class Scripts {
 				CONTROLLER.get("Expo measure").leftClick();
 				pause(8000);
 				CONTROLLER.get("Expo OK").leftClick();
-				
+				*/
 				// On prend l'image
 				CONTROLLER.get("Start").leftClick();
 				try {
@@ -109,10 +109,26 @@ public class Scripts {
 				CONTROLLER.get("Gaussian filter OK").leftClick();
 				pause(8000);
 				doWait();
+				/*CONTROLLER.get("chan1").leftClick();
+				pause(1000);
+				doWait();*/
+				CONTROLLER.get("RGB On/Off").leftClick();
+				pause(1000);
+				doWait();
 				CONTROLLER.get("8 bits").leftClick();
 				pause(1500);
 				doWait();
-				CONTROLLER.get("Min/Max").leftClick();
+				CONTROLLER.get("Lineaire").leftClick();
+				pause(1500);
+				doWait();
+				
+				CONTROLLER.get("chan2").leftClick();
+				pause(1000);
+				doWait();
+			/*	CONTROLLER.get("8 bits").leftClick();
+				pause(1500);
+				doWait();*/
+				CONTROLLER.get("Lineaire").leftClick();
 				pause(1500);
 				doWait();
 				//Sauvegarde
